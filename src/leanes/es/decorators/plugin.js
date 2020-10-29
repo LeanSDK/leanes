@@ -30,10 +30,11 @@ export default function plugin(... alPlugins) {
 
       const [ filename, vmMixin ] = vmPlugin(target);
       const [ preLast, last ] = slice.call(filename.split('/'), -2);
-      const pluginName = inflect.camelize(last !== 'index.js'
-        ? last.split('.')[0]
-        : preLast
-      );
+      const pluginName = filename.includes('/')
+        ? inflect.camelize(last !== 'index.js'
+          ? last.split('.')[0]
+          : preLast)
+        : filename;
 
       Reflect.defineProperty(vmMixin, 'name', {
         configurable: false,
