@@ -100,7 +100,7 @@ export default (Module) => {
     }
 
     // ipmInitializeFacade = PointerT(Facade.protected({
-    @method _initializeFacade(): void {
+    @method initializeFacade(): void {
       this._initializeModel();
       this._initializeController();
       this._initializeView();
@@ -343,8 +343,8 @@ export default (Module) => {
       // console.log('>?>?>? Facade after initializeNotifier', this._multitonKey, this._container);
       // Facade._instanceMap[asKey] = this;
       // console.log('>?>?>? Facade after Facade._instanceMap[asKey] = this');
-      this._initializeFacade();
-      // console.log('>?>?>? Facade after _initializeFacade');
+      this.initializeFacade();
+      // console.log('>?>?>? Facade after initializeFacade');
     }
   }
 }
