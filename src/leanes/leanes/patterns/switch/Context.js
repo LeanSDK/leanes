@@ -91,9 +91,7 @@ export default (Module) => {
       if (!_.isError(err)) {
         err = new Error(`non-error thrown: ${err}`);
       }
-      let headerSent = false;
-      if (this.headerSent || !this.writable)
-        headerSent = err.headerSent = true;
+      const headerSent = err.headerSent = !!(this.headerSent || !this.writable);
       this.switch.getViewComponent().emit('error', err, this);
       if (headerSent) return;
 
@@ -305,11 +303,11 @@ export default (Module) => {
       return this.response.headerSent;
     }
 
-    @method redirect(...args) {
+    @method redirect(...args: [string]): ?string {
       return this.response.redirect(...args);
     }
 
-    @method attachment(...args) {
+    @method attachment(...args: [string]): void  {
       return this.response.attachment(...args);
     }
 
@@ -321,7 +319,7 @@ export default (Module) => {
       return this.response.append(...args);
     }
 
-    @method vary(...args) {
+    @method vary(...args: [string]): void {
       return this.response.vary(...args);
     }
 
@@ -333,11 +331,11 @@ export default (Module) => {
       return this.response.remove(...args);
     }
 
-    @property set lastModified(date: Date): ?string {
+    @property set lastModified(date: string | Date): Date {
       return this.response.lastModified = date;
     }
 
-    @property set etag(value: string): ?string {
+    @property set etag(value: string): string {
       return this.response.etag = value;
     }
 

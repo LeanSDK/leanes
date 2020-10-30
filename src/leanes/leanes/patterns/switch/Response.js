@@ -225,7 +225,7 @@ export default (Module) => {
       return this.get('ETag')
     }
 
-    @property set etag(val): ?string {
+    @property set etag(val: string): string {
       if (!/^(W\/)?"/.test(val)) val = `\"${val}\"`;
       this.set('ETag', val);
       return val;
@@ -262,16 +262,14 @@ export default (Module) => {
       return this.headers[field.toLowerCase()] || '';
     }
 
-    @method 'set'(...args: [string | object, ?any]) {
+    @method 'set'(...args: [string | object]): ?any {
       const [ field, val ] = args;
-      let fieldValue;
       if (2 === args.length) {
         if (_.isArray(val)) {
-          fieldValue = val.map(String);
+          this.res.setHeader(field, val.map(String));
         } else {
-          fieldValue = String(val);
+          this.res.setHeader(field, String(val));
         }
-        this.res.setHeader(field, fieldValue)
       } else {
         for (const key in field) {
           if (!hasProp.call(field, key)) continue;
@@ -311,12 +309,9 @@ export default (Module) => {
       if (_.isFunction(this.res.flushHeaders)) {
         this.res.flushHeaders();
       } else {
-        let headerNames = {};
-        if (_.isFunction(this.res.getHeaderNames)) {
-          headerNames = this.res.getHeaderNames();
-        } else {
-          headerNames = Object.keys(this.res._headers);
-        }
+        const headerNames = _.isFunction(this.res.getHeaderNames)
+          ? this.res.getHeaderNames()
+          : Object.keys(this.res._headers);
         for (const header of headerNames) {
           this.res.removeHeader(header);
         }
