@@ -108,7 +108,16 @@ export default (Module) => {
 
     @method static getInstance(asKey: string): FacadeInterface {
       if (Facade._instanceMap[asKey] == null) {
-        Facade._instanceMap[asKey] = this.new(asKey);
+        // Facade._instanceMap[asKey] = this.new(asKey);
+        Facade._instanceMap[asKey] = new Proxy(this.new(asKey), {
+          get: (target, name, receiver) => {
+            if ((name in target._container) && typeof target._container[name] === "function") {
+              return target._container[name].bind(target._container)
+            } else {
+              return target[name]
+            }
+          },
+        });
       }
       return Facade._instanceMap[asKey];
     }
