@@ -43,6 +43,9 @@ import machine from './decorators/machine';
 import resolver from './decorators/resolver';
 import chains from './decorators/chains';
 
+import loadFiles from './decorators/loadFiles';
+import loadUtils from './decorators/loadUtils';
+
 import assert from 'assert';
 import lodash from 'lodash';
 
@@ -159,6 +162,8 @@ class ES extends _ES.prototype.Module {
   @decorator statemachine = machine;
   @decorator resolver = resolver;
   @decorator chains = chains;
+  @decorator loadFiles = loadFiles;
+  @decorator loadUtils = loadUtils;
 
   @constant MetaObject = _ES.prototype.MetaObject;
   @constant CoreObject = _ES.prototype.CoreObject;
