@@ -24,7 +24,7 @@ import type {
 export default (Module) => {
   const {
     APPLICATION_SWITCH,
-    HANDLER_RESULT, JOB_RESULT,
+    HANDLER_RESULT, SCRIPT_RESULT,
     STOPPED_MIGRATE, STOPPED_ROLLBACK, MIGRATE, ROLLBACK,
     initializeMixin, meta, property, method,
     Utils: { genRandomAlphaNumbers }
@@ -40,7 +40,7 @@ export default (Module) => {
       @method listNotificationInterests(...args): string[] {
         const interests = super.listNotificationInterests(...args);
         interests.push(HANDLER_RESULT);
-        interests.push(JOB_RESULT);
+        interests.push(SCRIPT_RESULT);
         interests.push(STOPPED_MIGRATE);
         interests.push(STOPPED_ROLLBACK);
         return interests;
@@ -54,7 +54,7 @@ export default (Module) => {
           case HANDLER_RESULT:
           case STOPPED_MIGRATE:
           case STOPPED_ROLLBACK:
-          case JOB_RESULT:
+          case SCRIPT_RESULT:
             this.emitter.emit(vsType, voBody);
             break;
           default:

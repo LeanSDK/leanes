@@ -47,6 +47,7 @@ export default (Module) => {
     @property static CONNECT_MODULE_TO_SHELL: string = 'connectModuleToShell';
 
     @property isLightweight: boolean = false;
+    @property name: string = null;
 
     // @property static get NAME(): string {
     //   return this.Module.name;
@@ -121,11 +122,14 @@ export default (Module) => {
       const isLightweight = symbol === LIGHTWEIGHT;
       if (isLightweight) {
         // console.log('>>>>QQQQ 12-12+6');
-        super(ApplicationFacade.getInstance(`${name}|>${uuid.v4()}`));
+        const appName = `${name}|>${uuid.v4()}`
+        super(ApplicationFacade.getInstance(appName));
+        this.name = appName;
         // console.log('>>>>QQQQ 12-12+7');
       } else {
         // console.log('>>>>QQQQ 12-12+8');
         super(ApplicationFacade.getInstance(name));
+        this.name = name;
         // console.log('>>>>QQQQ 12-12+9');
       }
       this.isLightweight = isLightweight;

@@ -13,28 +13,18 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-import type { ResourceInterface } from './ResourceInterface';
-import type { ContextInterface } from './ContextInterface';
+import crypto from 'crypto';
 
-export interface ApplicationInterface {
-  isLightweight: boolean;
-  name: string;
+export default (Module) => {
+  const {
+    Utils: { jsonStringify }
+  } = Module.NS
 
-  start(): void;
-  finish(): void;
-
-  migrate(opts: ?{until: ?string}): Promise<void>;
-
-  rollback(opts: ?{steps: ?number, until: ?string}): Promise<void>;
-
-  run<
-    T = any, R = any
-  >(scriptName: string, data: T): Promise<R>;
-
-  execute<
-    T = any, R = Promise<{|result: T, resource: ResourceInterface|}>
-  >(resourceName: string, {
-    context: ContextInterface,
-    reverse: string
-  }, action: string): Promise<R>;
+  Module.defineUtil(__filename, (algorithm: string, secret: string, attributes: any): string => {
+    const str = jsonStringify(attributes);
+    return crypto
+      .createHmac(algorithm, secret)
+      .update(str)
+      .digest('hex')
+  });
 }

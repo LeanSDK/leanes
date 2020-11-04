@@ -21,7 +21,7 @@ import type { NotificationInterface } from '../../patternes';
 
 export default (Module) => {
   const {
-    JOB_RESULT, START_RESQUE, RESQUE, RESQUE_EXECUTOR,
+    SCRIPT_RESULT, START_RESQUE, RESQUE, RESQUE_EXECUTOR,
     initializeMixin, meta, property, method,
     Utils: { _, genRandomAlphaNumbers }
   } = Module.NS;
@@ -54,7 +54,7 @@ export default (Module) => {
       }
 
       @method listNotificationInterests(): string[] {
-        return [JOB_RESULT, START_RESQUE];
+        return [SCRIPT_RESULT, START_RESQUE];
       }
 
       @method handleNotification(aoNotification: NotificationInterface) {
@@ -62,7 +62,7 @@ export default (Module) => {
         const voBody = aoNotification.getBody();
         const vsType = aoNotification.getType();
         switch (vsName) {
-          case JOB_RESULT:
+          case SCRIPT_RESULT:
             this.getViewComponent().emit(vsType, voBody);
             break;
           case START_RESQUE:

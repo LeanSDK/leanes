@@ -70,7 +70,7 @@ class LeanES extends PatternES {
   @constant DELAYED_JOBS_QUEUE = 'delayed_jobs';
   @constant DELAYED_JOBS_SCRIPT = 'DelayedJobScript';
   @constant DEFAULT_QUEUE = 'default';
-  @constant JOB_RESULT =  'JOB_RESULT';
+  @constant SCRIPT_RESULT =  'SCRIPT_RESULT';
   @constant SHELL =  'SHELL';
   // @constant APPLICATION_MEDIATOR =  'ApplicationMediator';
   // @constant APPLICATION_PROXY =  'ApplicationProxy';

@@ -78,7 +78,7 @@ describe('Script', () => {
       }, 'TEST_TYPE'));
       const options = await promise;
       assert.deepEqual(options, [
-        LeanES.NS.JOB_RESULT,
+        LeanES.NS.SCRIPT_RESULT,
         {
           result: {
             body: 'body'
@@ -125,7 +125,7 @@ describe('Script', () => {
         body: 'body'
       }, 'TEST_TYPE'));
       const [title, body, type] = await promise;
-      assert.equal(title, LeanES.NS.JOB_RESULT);
+      assert.equal(title, LeanES.NS.SCRIPT_RESULT);
       assert.instanceOf(body.error, Error);
       assert.equal(body.error.message, 'ERROR in Script::execute TEST_ERROR');
       assert.equal(type, 'TEST_TYPE');

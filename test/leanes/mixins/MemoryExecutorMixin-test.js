@@ -57,7 +57,7 @@ describe('MemoryExecutorMixin', () => {
       const executor = MemoryResqueExecutor.new();
       executor.setName(executorName);
       executor.setViewComponent(viewComponent);
-      assert.deepEqual(executor.listNotificationInterests(), [LeanES.NS.JOB_RESULT, LeanES.NS.START_RESQUE]);
+      assert.deepEqual(executor.listNotificationInterests(), [LeanES.NS.SCRIPT_RESULT, LeanES.NS.START_RESQUE]);
     });
   });
   describe('.stop', () => {
@@ -612,7 +612,7 @@ describe('MemoryExecutorMixin', () => {
       const body = {
         test: 'test'
       };
-      facade.sendNotification(LeanES.NS.JOB_RESULT, body, type);
+      facade.sendNotification(LeanES.NS.SCRIPT_RESULT, body, type);
       const data = await promise;
       assert.deepEqual(data, body);
     });

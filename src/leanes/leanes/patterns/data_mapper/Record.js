@@ -34,9 +34,8 @@ const hasProp = {}.hasOwnProperty;
 export default (Module) => {
   const {
     CoreObject,
-    assert,
     initialize, partOf, meta, property, method, nameBy, attribute, chains,
-    Utils: { _, joi, inflect }
+    Utils: { _, joi, inflect, assert }
   } = Module.NS;
 
   const schemas = new Map;
@@ -257,13 +256,13 @@ export default (Module) => {
       return this.metaObject.getGroup('customFilters', false);
     }
 
-    @property static set customFilters(config): void {
-      for (const asFilterName in config) {
-        if (!hasProp.call(config, asFilterName)) continue;
-        const aoStatement = config[asFilterName];
-        this.metaObject.addMetaData('customFilters', asFilterName, aoStatement);
-      }
-    }
+    // @property static set customFilters(config): void {
+    //   for (const asFilterName in config) {
+    //     if (!hasProp.call(config, asFilterName)) continue;
+    //     const aoStatement = config[asFilterName];
+    //     this.metaObject.addMetaData('customFilters', asFilterName, aoStatement);
+    //   }
+    // }
 
     @method static parentClassNames(AbstractClass: ?($Rest<RecordStaticInterface> | Class<Object>) = null): string[] {
       if (AbstractClass == null) {

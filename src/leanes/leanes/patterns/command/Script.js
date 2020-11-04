@@ -18,7 +18,7 @@ import type { ScriptInterface } from '../../interfaces/ScriptInterface';
 
 export default (Module) => {
   const {
-    JOB_RESULT,
+    SCRIPT_RESULT,
     // SimpleCommand,
     Command,
     ConfigurableMixin,
@@ -49,7 +49,7 @@ export default (Module) => {
         console.error(error);
         voResult = { error };
       }
-      this.send(JOB_RESULT, voResult, reverse);
+      this.send(SCRIPT_RESULT, voResult, reverse);
     }
   }
 }
