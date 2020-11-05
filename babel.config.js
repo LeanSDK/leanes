@@ -4,7 +4,7 @@ module.exports = {
   // rootMode: 'upward',
   // test: [__dirname],
   // include: ["./node_modules/leanes/src"],
-  babelrcRoots: [ "." ],
+  // babelrcRoots: [ "." ],
   presets: [
     ['@babel/preset-env'],
   ],
