@@ -65,7 +65,7 @@ export default (Module) => {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-            if (typeof voMediator.getViewComponent == 'function') {
+            if (voMediator != null && typeof voMediator.getViewComponent == 'function') {
               const app = voMediator.getViewComponent();
               if (app && app.Module) {
                 return app.Module;
