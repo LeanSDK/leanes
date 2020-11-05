@@ -185,7 +185,7 @@ export default (Module) => {
 
     @method lazyRegisterProxy(asProxyName: string, asProxyClassName: ?string, ahData: ?any): void {
       this._metaProxyMap[asProxyName] = {
-        className: asProxyClassName,
+        className: (asProxyClassName != null ? asProxyClassName : asProxyName),
         data: ahData
       };
       if (!this._container.isBound(`Factory<${asProxyName}>`)) {
@@ -198,11 +198,8 @@ export default (Module) => {
     }
 
     @method addAdapter(asKey: string, asClassName: ?string): void {
-      if (asClassName == null) {
-        asClassName = asKey;
-      }
       if (this._classNames[asKey] == null) {
-        this._classNames[asKey] = asClassName;
+        this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
       if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {

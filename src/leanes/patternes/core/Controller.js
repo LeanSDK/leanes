@@ -190,12 +190,9 @@ export default (Module) => {
     }
 
     @method lazyRegisterCommand(asNotificationName: string, asClassName: ?string): void {
-      if (asClassName == null) {
-        asClassName = asNotificationName;
-      }
       if (this._commandMap[asNotificationName] == null && this._classNames[asNotificationName] == null) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
-        this._classNames[asNotificationName] = asClassName;
+        this._classNames[asNotificationName] = (asClassName != null ? asClassName : asNotificationName);
       }
       if (!this._container.isBound(`Factory<${asNotificationName}>`)) {
         this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
@@ -226,11 +223,8 @@ export default (Module) => {
     }
 
     @method addCase(asKey: string, asClassName: ?string): void {
-      if (asClassName == null) {
-        asClassName = asKey;
-      }
       if (this._classNames[asKey] == null) {
-        this._classNames[asKey] = asClassName;
+        this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
       if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
@@ -274,11 +268,8 @@ export default (Module) => {
     }
 
     @method addSuite(asKey: string, asClassName: ?string): void {
-      if (asClassName == null) {
-        asClassName = asKey;
-      }
       if (this._classNames[asKey] == null) {
-        this._classNames[asKey] = asClassName;
+        this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
       if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
