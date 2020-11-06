@@ -172,6 +172,9 @@ export default (Module) => {
       }
       // Alert the mediator that it has been registered.
       aoMediator.onRegister();
+      if (!this._container.isBound(vsName)) {
+        this._container.bind(vsName).toConstantValue(aoMediator);
+      }
       if (!this._container.isBound(`Factory<${vsName}>`)) {
         this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
           return () => {
@@ -232,6 +235,12 @@ export default (Module) => {
       delete this._metaMediatorMap[asMediatorName];
       // Alert the mediator that it has been removed
       await voMediator.onRemove();
+      if (this._container.isBound(asMediatorName)) {
+        this._container.unbind(asMediatorName);
+      }
+      if (this._container.isBound(`Factory<${asMediatorName}>`)) {
+        this._container.unbind(`Factory<${asMediatorName}>`);
+      }
       return voMediator;
     }
 

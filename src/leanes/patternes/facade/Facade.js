@@ -132,6 +132,7 @@ export default (Module) => {
       // this._model = undefined;
       // this._view = undefined;
       // this._controller = undefined;
+      this._container.unbindAll();
       delete this._model;
       delete this._view;
       delete this._controller;

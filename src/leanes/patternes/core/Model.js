@@ -126,6 +126,9 @@ export default (Module) => {
       this._proxyMap[vsName] = aoProxy;
       // container.bind(aoProxy.getProxyName()).to(aoProxy);
       aoProxy.onRegister();
+      if (!this._container.isBound(vsName)) {
+        this._container.bind(vsName).toConstantValue(aoProxy);
+      }
       if (!this._container.isBound(`Factory<${vsName}>`)) {
         this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
           return () => {
@@ -148,6 +151,12 @@ export default (Module) => {
         // this._proxyMap[asProxyName] = undefined;
         // this._metaProxyMap[asProxyName] = undefined;
         await voProxy.onRemove();
+      }
+      if (this._container.isBound(asProxyName)) {
+        this._container.unbind(asProxyName);
+      }
+      if (this._container.isBound(`Factory<${asProxyName}>`)) {
+        this._container.unbind(`Factory<${asProxyName}>`);
       }
       return voProxy;
     }
