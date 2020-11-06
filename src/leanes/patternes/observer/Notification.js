@@ -14,7 +14,7 @@
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
-// import { injectable, inject} from "inversify";
+// import { injectable, inject} from 'inversify';
 
 export default (Module) => {
 

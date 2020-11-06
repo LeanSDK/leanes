@@ -18,8 +18,8 @@ import type { ViewInterface } from '../interfaces/ViewInterface';
 import type { CommandInterface } from '../interfaces/CommandInterface';
 import type { CaseInterface } from '../interfaces/CaseInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
@@ -61,7 +61,7 @@ export default (Module) => {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {
-        if (this._multitonKey != null) {
+        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
@@ -70,17 +70,17 @@ export default (Module) => {
               if (app && app.Module) {
                 return app.Module;
               } else {
-                return this.Module;
+                return voFacade.Module;
               }
             } else {
-              return this.Module;
+              return voFacade.Module;
             }
           } else {
-            return this.Module;
+            return voFacade.Module;
           }
         } else {
           return this.Module;
-        }
+        }})()
       }
     }
 

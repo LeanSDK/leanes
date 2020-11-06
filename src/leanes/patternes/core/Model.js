@@ -16,8 +16,8 @@
 import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
@@ -60,7 +60,7 @@ export default (Module) => {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {
-        if (this._multitonKey != null) {
+        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
@@ -69,17 +69,17 @@ export default (Module) => {
               if (app && app.Module) {
                 return app.Module;
               } else {
-                return this.Module;
+                return voFacade.Module;
               }
             } else {
-              return this.Module;
+              return voFacade.Module;
             }
           } else {
-            return this.Module;
+            return voFacade.Module;
           }
         } else {
           return this.Module;
-        }
+        }})()
       }
     }
 

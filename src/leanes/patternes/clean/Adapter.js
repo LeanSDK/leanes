@@ -14,7 +14,7 @@
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-import { injectable } from "inversify";
+import { injectable } from 'inversify';
 
 export default (Module) => {
 

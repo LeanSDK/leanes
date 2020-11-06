@@ -23,8 +23,8 @@ import type { ViewInterface } from '../interfaces/ViewInterface';
 import type { CaseInterface } from '../interfaces/CaseInterface';
 import type { SuiteInterface } from '../interfaces/SuiteInterface';
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
