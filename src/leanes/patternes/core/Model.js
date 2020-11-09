@@ -16,8 +16,8 @@
 import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
@@ -60,26 +60,26 @@ export default (Module) => {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {
-        if (this._multitonKey != null) {
+        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-            if (typeof voMediator.getViewComponent == 'function') {
+            if (voMediator != null && typeof voMediator.getViewComponent == 'function') {
               const app = voMediator.getViewComponent();
               if (app && app.Module) {
                 return app.Module;
               } else {
-                return this.Module;
+                return voFacade.Module;
               }
             } else {
-              return this.Module;
+              return voFacade.Module;
             }
           } else {
-            return this.Module;
+            return voFacade.Module;
           }
         } else {
           return this.Module;
-        }
+        }})()
       }
     }
 
@@ -126,6 +126,9 @@ export default (Module) => {
       this._proxyMap[vsName] = aoProxy;
       // container.bind(aoProxy.getProxyName()).to(aoProxy);
       aoProxy.onRegister();
+      if (!this._container.isBound(vsName)) {
+        this._container.bind(vsName).toConstantValue(aoProxy);
+      }
       if (!this._container.isBound(`Factory<${vsName}>`)) {
         this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
           return () => {
@@ -148,6 +151,12 @@ export default (Module) => {
         // this._proxyMap[asProxyName] = undefined;
         // this._metaProxyMap[asProxyName] = undefined;
         await voProxy.onRemove();
+      }
+      if (this._container.isBound(asProxyName)) {
+        this._container.unbind(asProxyName);
+      }
+      if (this._container.isBound(`Factory<${asProxyName}>`)) {
+        this._container.unbind(`Factory<${asProxyName}>`);
       }
       return voProxy;
     }
@@ -185,7 +194,7 @@ export default (Module) => {
 
     @method lazyRegisterProxy(asProxyName: string, asProxyClassName: ?string, ahData: ?any): void {
       this._metaProxyMap[asProxyName] = {
-        className: asProxyClassName,
+        className: (asProxyClassName != null ? asProxyClassName : asProxyName),
         data: ahData
       };
       if (!this._container.isBound(`Factory<${asProxyName}>`)) {
@@ -198,11 +207,8 @@ export default (Module) => {
     }
 
     @method addAdapter(asKey: string, asClassName: ?string): void {
-      if (asClassName == null) {
-        asClassName = asKey;
-      }
       if (this._classNames[asKey] == null) {
-        this._classNames[asKey] = asClassName;
+        this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
       if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {

@@ -18,8 +18,8 @@ import type { MediatorInterface } from '../interfaces/MediatorInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
 import type { ObserverInterface } from '../interfaces/ObserverInterface';
 import type { ViewInterface } from '../interfaces/ViewInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
@@ -62,26 +62,26 @@ export default (Module) => {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {
-        if (this._multitonKey != null) {
+        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-            if (typeof voMediator.getViewComponent == 'function') {
+            if (voMediator != null && typeof voMediator.getViewComponent == 'function') {
               const app = voMediator.getViewComponent();
               if (app && app.Module) {
                 return app.Module;
               } else {
-                return this.Module;
+                return voFacade.Module;
               }
             } else {
-              return this.Module;
+              return voFacade.Module;
             }
           } else {
-            return this.Module;
+            return voFacade.Module;
           }
         } else {
           return this.Module;
-        }
+        }})()
       }
     }
 
@@ -172,6 +172,9 @@ export default (Module) => {
       }
       // Alert the mediator that it has been registered.
       aoMediator.onRegister();
+      if (!this._container.isBound(vsName)) {
+        this._container.bind(vsName).toConstantValue(aoMediator);
+      }
       if (!this._container.isBound(`Factory<${vsName}>`)) {
         this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
           return () => {
@@ -232,6 +235,12 @@ export default (Module) => {
       delete this._metaMediatorMap[asMediatorName];
       // Alert the mediator that it has been removed
       await voMediator.onRemove();
+      if (this._container.isBound(asMediatorName)) {
+        this._container.unbind(asMediatorName);
+      }
+      if (this._container.isBound(`Factory<${asMediatorName}>`)) {
+        this._container.unbind(`Factory<${asMediatorName}>`);
+      }
       return voMediator;
     }
 

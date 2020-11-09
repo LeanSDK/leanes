@@ -15,7 +15,7 @@
 
 import type { CommandInterface } from '../interfaces/CommandInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
-import { injectable } from "inversify";
+import { injectable } from 'inversify';
 
 export default (Module) => {
   const {

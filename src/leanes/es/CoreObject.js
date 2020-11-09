@@ -170,6 +170,10 @@ export default (NS) => {
       return;
     }
 
+    static onInitializePatch() {
+      return;
+    }
+
     // General class API
 
     get Module() {

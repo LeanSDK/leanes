@@ -23,8 +23,8 @@ import type { ViewInterface } from '../interfaces/ViewInterface';
 import type { CaseInterface } from '../interfaces/CaseInterface';
 import type { SuiteInterface } from '../interfaces/SuiteInterface';
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-import { Container } from "inversify";
-// import { injectable, inject, Container } from "inversify";
+import { Container } from 'inversify';
+// import { injectable, inject, Container } from 'inversify';
 
 export default (Module) => {
   const {
@@ -132,6 +132,7 @@ export default (Module) => {
       // this._model = undefined;
       // this._view = undefined;
       // this._controller = undefined;
+      this._container.unbindAll();
       delete this._model;
       delete this._view;
       delete this._controller;
