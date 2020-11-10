@@ -66,6 +66,30 @@ export default (Module) => {
       return this._container;
     }
 
+    @property _ApplicationModule: ?Class<Module> = null;
+
+    @property get ApplicationModule(): Class<Module> {
+      if (this._ApplicationModule != null) {
+        return this._ApplicationModule;
+      } else {
+        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+          const voMediator = this.retrieveMediator(APPLICATION_MEDIATOR);
+          if (voMediator != null) {
+            const app = voMediator.getViewComponent();
+            if (app != null && app.Module) {
+              return app.Module;
+            } else {
+              return this.Module;
+            }
+          } else {
+            return this.Module;
+          }
+        } else {
+          return this.Module;
+        }})()
+      }
+    }
+
     // ipmInitializeModel = PointerT(Facade.protected({
     @method _initializeModel(): void {
       if (this._model == null) {
