@@ -393,7 +393,7 @@ ApplicationTF(LeanES);
 import LogMessageCommandTF from './patterns/command/LogMessageCommand';
 LogMessageCommandTF(LeanES);
 
-// export * from '../patternes';
+export * from '../patternes';
 // console.log('>>?MMMMM LeanES after 1515');
 export * from '../pipes';
 // console.log('>>?MMMMM LeanES after 1616');
