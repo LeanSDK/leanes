@@ -19,7 +19,7 @@ import { injectable } from 'inversify';
 export default (Module) => {
 
   const {
-    CoreObject,
+    Notifier,
     assert,
     initialize, partOf, meta, method, property, nameBy
   } = Module.NS;
@@ -27,7 +27,7 @@ export default (Module) => {
   @initialize
   @injectable()
   @partOf(Module)
-  class Adapter extends CoreObject implements AdapterInterface {
+  class Adapter extends Notifier implements AdapterInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
