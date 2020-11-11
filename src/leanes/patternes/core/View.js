@@ -64,15 +64,11 @@ export default (Module) => {
       } else {
         return this._ApplicationModule = (() => {if (this._multitonKey != null) {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          if (typeof voFacade.retrieveMediator == 'function') {
-            const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-            if (voMediator != null && typeof voMediator.getViewComponent == 'function') {
-              const app = voMediator.getViewComponent();
-              if (app && app.Module) {
-                return app.Module;
-              } else {
-                return voFacade.Module;
-              }
+          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+          if (voMediator != null) {
+            const app = voMediator.getViewComponent();
+            if (app != null && app.Module) {
+              return app.Module;
             } else {
               return voFacade.Module;
             }
