@@ -1,50 +1,53 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+// leanes-restful-addon (HttpResponseInterface)
 
-export interface ResponseInterface {
-  +res: object; // native response object
 
-  +socket: ?object;
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-  +header: objec;
+// export interface ResponseInterface {
+//   +res: object; // native response object
 
-  +headers: object;
+//   +socket: ?object;
 
-  status: ?number;
+//   +header: objec;
 
-  message: string;
+//   +headers: object;
 
-  body: any;
+//   status: ?number;
 
-  length: number;
+//   message: string;
 
-  +headerSent: ?boolean;
+//   body: any;
 
-  type: ?string;
+//   length: number;
 
-  is(...args: [string | Array]): ?(string | boolean);
+//   +headerSent: ?boolean;
 
-  'get'(field: string): string | string[];
+//   type: ?string;
 
-  'set'(...args: [string | object]): ?any;
+//   is(...args: [string | Array]): ?(string | boolean);
 
-  append(field: string, val: string | string[]): void;
+//   'get'(field: string): string | string[];
 
-  remove(field: string): void;
+//   'set'(...args: [string | object]): ?any;
 
-  +writable: boolean;
+//   append(field: string, val: string | string[]): void;
 
-  flushHeaders(): void;
-}
+//   remove(field: string): void;
+
+//   +writable: boolean;
+
+//   flushHeaders(): void;
+// }

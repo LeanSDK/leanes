@@ -1,92 +1,95 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+//leanes-queryable-addon
 
-export interface QueryInterface {
-  $forIn: ?object;
 
-  $join: ?object;
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-  $let: ?object;
+// export interface QueryInterface {
+//   $forIn: ?object;
 
-  $filter: ?object;
+//   $join: ?object;
 
-  $collect: ?object;
+//   $let: ?object;
 
-  $into: ?(string | object);
+//   $filter: ?object;
 
-  $having: ?object;
+//   $collect: ?object;
 
-  $sort: ?Array;
+//   $into: ?(string | object);
 
-  $limit: ?number;
+//   $having: ?object;
 
-  $offset: ?number;
+//   $sort: ?Array;
 
-  $avg: ?string;
+//   $limit: ?number;
 
-  $sum: ?string;
+//   $offset: ?number;
 
-  $min: ?string;
+//   $avg: ?string;
 
-  $max: ?string;
+//   $sum: ?string;
 
-  $count: ?boolean;
+//   $min: ?string;
 
-  $distinct: ?boolean;
+//   $max: ?string;
 
-  $remove: ?(string | object);
+//   $count: ?boolean;
 
-  $patch: ?object;
+//   $distinct: ?boolean;
 
-  $return: ?(string | object);
+//   $remove: ?(string | object);
 
-  forIn(aoDefinitions: object): QueryInterface;
+//   $patch: ?object;
 
-  join(aoDefinitions: object): QueryInterface;
+//   $return: ?(string | object);
 
-  filter(aoDefinitions: object): QueryInterface;
+//   forIn(aoDefinitions: object): QueryInterface;
 
-  'let'(aoDefinitions: object): QueryInterface;
+//   join(aoDefinitions: object): QueryInterface;
 
-  collect(aoDefinition: object): QueryInterface;
+//   filter(aoDefinitions: object): QueryInterface;
 
-  into(aoDefinition: string | object): QueryInterface;
+//   'let'(aoDefinitions: object): QueryInterface;
 
-  having(aoDefinition: object): QueryInterface;
+//   collect(aoDefinition: object): QueryInterface;
 
-  sort(aoDefinition: object): QueryInterface;
+//   into(aoDefinition: string | object): QueryInterface;
 
-  limit(anValue: number): QueryInterface;
+//   having(aoDefinition: object): QueryInterface;
 
-  offset(anValue: number): QueryInterface;
+//   sort(aoDefinition: object): QueryInterface;
 
-  distinct(): QueryInterface;
+//   limit(anValue: number): QueryInterface;
 
-  remove(expr: ?(string | object)): QueryInterface;
+//   offset(anValue: number): QueryInterface;
 
-  patch(aoDefinition: object): QueryInterface;
+//   distinct(): QueryInterface;
 
-  'return'(aoDefinition: string | object): QueryInterface;
+//   remove(expr: ?(string | object)): QueryInterface;
 
-  count(): QueryInterface;
+//   patch(aoDefinition: object): QueryInterface;
 
-  avg(asDefinition: string): QueryInterface;
+//   'return'(aoDefinition: string | object): QueryInterface;
 
-  min(asDefinition: string): QueryInterface;
+//   count(): QueryInterface;
 
-  max(asDefinition: string): QueryInterface;
+//   avg(asDefinition: string): QueryInterface;
 
-  sum(asDefinition: string): QueryInterface;
-}
+//   min(asDefinition: string): QueryInterface;
+
+//   max(asDefinition: string): QueryInterface;
+
+//   sum(asDefinition: string): QueryInterface;
+// }

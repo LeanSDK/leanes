@@ -1,82 +1,86 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+// leanes-restful-addon (HttpRequestInterface)
 
-export interface RequestInterface {
-  +req: object; // native request object
 
-  body: ?any;
 
-  +header: object;
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-  +headers: object;
+// export interface RequestInterface {
+//   +req: object; // native request object
 
-  +originalUrl: string;
+//   body: ?any;
 
-  url: string;
+//   +header: object;
 
-  +origin: string;
+//   +headers: object;
 
-  +href: string;
+//   +originalUrl: string;
 
-  method: string;
+//   url: string;
 
-  path: string;
+//   +origin: string;
 
-  query: object;
+//   +href: string;
 
-  querystring: string;
+//   method: string;
 
-  search: string;
+//   path: string;
 
-  +host: string;
+//   query: object;
 
-  +hostname: string;
+//   querystring: string;
 
-  +fresh: boolean;
+//   search: string;
 
-  +stale: boolean;
+//   +host: string;
 
-  +idempotent: boolean;
+//   +hostname: string;
 
-  +socket: ?object;
+//   +fresh: boolean;
 
-  +charset: string;
+//   +stale: boolean;
 
-  +length: number;
+//   +idempotent: boolean;
 
-  +protocol: 'http' | 'https';
+//   +socket: ?object;
 
-  +secure: boolean;
+//   +charset: string;
 
-  ip: ?string;
+//   +length: number;
 
-  +ips: string[];
+//   +protocol: 'http' | 'https';
 
-  +subdomains: string[];
+//   +secure: boolean;
 
-  accepts(...args: [?(string | Array)]): string | Array | boolean;
+//   ip: ?string;
 
-  acceptsCharsets(...args: [?(string | Array)]): string | Array;
+//   +ips: string[];
 
-  acceptsEncodings(...args: [?(string | Array)]): string | Array;
+//   +subdomains: string[];
 
-  acceptsLanguages(...args: [?(string | Array)]): string | Array;
+//   accepts(...args: [?(string | Array)]): string | Array | boolean;
 
-  is(...args: [string | Array]): ?(string | boolean);
+//   acceptsCharsets(...args: [?(string | Array)]): string | Array;
 
-  +type: string;
+//   acceptsEncodings(...args: [?(string | Array)]): string | Array;
 
-  'get'(field: string): string;
-}
+//   acceptsLanguages(...args: [?(string | Array)]): string | Array;
+
+//   is(...args: [string | Array]): ?(string | boolean);
+
+//   +type: string;
+
+//   'get'(field: string): string;
+// }

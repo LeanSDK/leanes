@@ -1,118 +1,121 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+// leanes-restful-addon
 
-export interface ContextInterface {
-  +req: object; // native request object
 
-  +res: object; // native response object
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-  request: ?RequestInterface;
+// export interface ContextInterface {
+//   +req: object; // native request object
 
-  response: ?ResponseInterface;
+//   +res: object; // native response object
 
-  state: ?object;
+//   request: ?RequestInterface;
 
-  respond: ?boolean;
+//   response: ?ResponseInterface;
 
-  routePath: ?string;
+//   state: ?object;
 
-  pathParams: ?object;
+//   respond: ?boolean;
 
-  transaction: ?object;
+//   routePath: ?string;
 
-  session: ?object;
+//   pathParams: ?object;
 
-  'throw'(...args: [string | number, ?string, ?object]): void;
+//   transaction: ?object;
 
-  assert(...args): void;
+//   session: ?object;
 
-  onerror(err: ?any): void;
+//   'throw'(...args: [string | number, ?string, ?object]): void;
 
-  // Request aliases
-  +header: object;
+//   assert(...args): void;
 
-  +headers: object;
+//   onerror(err: ?any): void;
 
-  method: string;
+//   // Request aliases
+//   +header: object;
 
-  url: string;
+//   +headers: object;
 
-  originalUrl: string;
+//   method: string;
 
-  +origin: string;
+//   url: string;
 
-  +href: string;
+//   originalUrl: string;
 
-  path: string;
+//   +origin: string;
 
-  query: object;
+//   +href: string;
 
-  querystring: string;
+//   path: string;
 
-  +host: string;
+//   query: object;
 
-  +hostname: string;
+//   querystring: string;
 
-  +fresh: boolean;
+//   +host: string;
 
-  +stale: boolean;
+//   +hostname: string;
 
-  +socket: ?object;
+//   +fresh: boolean;
 
-  +protocol: string;
+//   +stale: boolean;
 
-  +secure: boolean;
+//   +socket: ?object;
 
-  +ip: ?string;
+//   +protocol: string;
 
-  +ips: string[];
+//   +secure: boolean;
 
-  +subdomains: string[];
+//   +ip: ?string;
 
-  is(...args: [string | Array]): ?(string | boolean);
+//   +ips: string[];
 
-  accepts(...args: [?(string | Array)]): string | Array | boolean;
+//   +subdomains: string[];
 
-  acceptsEncodings(...args: [?(string | Array)]): string | Array;
+//   is(...args: [string | Array]): ?(string | boolean);
 
-  acceptsCharsets(...args: [?(string | Array)]): string | Array;
+//   accepts(...args: [?(string | Array)]): string | Array | boolean;
 
-  acceptsLanguages(...args: [?(string | Array)]): string | Array;
+//   acceptsEncodings(...args: [?(string | Array)]): string | Array;
 
-  'get'(...args: [string]): string;
+//   acceptsCharsets(...args: [?(string | Array)]): string | Array;
 
-  // Response aliases
-  body: any;
+//   acceptsLanguages(...args: [?(string | Array)]): string | Array;
 
-  status: ?number;
+//   'get'(...args: [string]): string;
 
-  message: string;
+//   // Response aliases
+//   body: any;
 
-  length: number;
+//   status: ?number;
 
-  +writable: boolean;
+//   message: string;
 
-  type: ?string;
+//   length: number;
 
-  +headerSent: ?boolean;
+//   +writable: boolean;
 
-  'set'(...args: [string | object]): ?any;
+//   type: ?string;
 
-  append(...args: [string, string | string[]]): void;
+//   +headerSent: ?boolean;
 
-  flushHeaders(): void;
+//   'set'(...args: [string | object]): ?any;
 
-  remove(...args: [string]): void;
-}
+//   append(...args: [string, string | string[]]): void;
+
+//   flushHeaders(): void;
+
+//   remove(...args: [string]): void;
+// }

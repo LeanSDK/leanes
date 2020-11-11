@@ -1,45 +1,47 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+//leanes-queryable-addon
 
-import type { QueryInterface } from './QueryInterface';
-import type { CursorInterface } from './CursorInterface';
-// import type { CollectionInterface } from './CollectionInterface';
-// import type { RecordInterface } from './RecordInterface';
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-export interface QueryableCollectionInterface<
-  C, D
-> {
-  findBy(query: object, options: ?object): Promise<CursorInterface<C, D>>;
+// import type { QueryInterface } from './QueryInterface';
+// import type { CursorInterface } from './CursorInterface';
+// // import type { CollectionInterface } from './CollectionInterface';
+// // import type { RecordInterface } from './RecordInterface';
 
-  takeBy(query: object, options: ?object): Promise<CursorInterface<C, D>>;
+// export interface QueryableCollectionInterface<
+//   C, D
+// > {
+//   findBy(query: object, options: ?object): Promise<CursorInterface<C, D>>;
 
-  deleteBy(query: object): Promise<void>;
+//   takeBy(query: object, options: ?object): Promise<CursorInterface<C, D>>;
 
-  destroyBy(query: object): Promise<void>;
+//   deleteBy(query: object): Promise<void>;
 
-  removeBy(query: object): Promise<void>;
+//   destroyBy(query: object): Promise<void>;
 
-  updateBy(query: object, properties: object): Promise<void>;
+//   removeBy(query: object): Promise<void>;
 
-  patchBy(query: object, properties: object): Promise<void>;
+//   updateBy(query: object, properties: object): Promise<void>;
 
-  exists(query: object): Promise<boolean>;
+//   patchBy(query: object, properties: object): Promise<void>;
 
-  query(aoQuery: object | QueryInterface): Promise<QueryInterface>;
+//   exists(query: object): Promise<boolean>;
 
-  parseQuery(aoQuery: object | QueryInterface): Promise<object | string | QueryInterface>;
+//   query(aoQuery: object | QueryInterface): Promise<QueryInterface>;
 
-  executeQuery(query: object | string | QueryInterface): Promise<CursorInterface<?C, *>>;
-}
+//   parseQuery(aoQuery: object | QueryInterface): Promise<object | string | QueryInterface>;
+
+//   executeQuery(query: object | string | QueryInterface): Promise<CursorInterface<?C, *>>;
+// }

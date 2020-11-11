@@ -1,255 +1,259 @@
-// This file is part of LeanES.
-//
-// LeanES is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// LeanES is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
-
-import type { QueryInterface } from '../../interfaces/QueryInterface';
-
-const hasProp = {}.hasOwnProperty;
-
-export default (Module) => {
-  const {
-    CoreObject,
-    assert,
-    initialize, partOf, meta, property, method, nameBy,
-    Utils: { _ }
-  } = Module.NS;
+//leanes-queryable-addon
 
 
-  @initialize
-  @partOf(Module)
-  class Query extends CoreObject implements QueryInterface {
-    @nameBy static  __filename = __filename;
-    @meta static object = {};
 
-    // TODO: это надо переделать на нормальную проверку типа в $filter - т.е. сделать спец flow тип
-    // static operatorsMap: object = {
-    //   $and: Array,
-    //   $or: Array,
-    //   $not: Object,
-    //   $nor: Array, // not or # !(a||b) === !a && !b
-    //
-    //   // без вложенных условий и операторов - value конечное значение для сравнения
-    //   $eq: AnyT, // ==
-    //   $ne: AnyT, // !=
-    //   $lt: AnyT, // <
-    //   $lte: AnyT, // <=
-    //   $gt: AnyT, // >
-    //   $gte: AnyT, // >=
-    //   $in: Array, // check value present in array
-    //   $nin: Array, // ... not present in array
-    //
-    //   // field has array of values
-    //   $all: Array, // contains some values
-    //   $elemMatch: Object, // conditions for complex item
-    //   $size: Number, // condition for array length
-    //   $exists: Boolean, // condition for check present some value in field
-    //   $type: String, // check value type
-    //   $mod: Array, // [divisor, remainder] for example [4,0] делится ли на 4
-    //   $regex: UnionG(RegExp, String), // value must be string. ckeck it by RegExp.
-    //   $td: Boolean, // this day (today)
-    //   $ld: Boolean, // last day (yesterday)
-    //   $tw: Boolean, // this week
-    //   $lw: Boolean, // last week
-    //   $tm: Boolean, // this month
-    //   $lm: Boolean, // last month
-    //   $ty: Boolean, // this year
-    //   $ly: Boolean // last year
-    // }
+// // This file is part of LeanES.
+// //
+// // LeanES is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU Lesser General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // LeanES is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU Lesser General Public License for more details.
+// //
+// // You should have received a copy of the GNU Lesser General Public License
+// // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-    @property $forIn: ?object = null;
+// import type { QueryInterface } from '../../interfaces/QueryInterface';
 
-    @property $join: ?object = null;
+// const hasProp = {}.hasOwnProperty;
 
-    @property $let: ?object = null;
+// export default (Module) => {
+//   const {
+//     CoreObject,
+//     assert,
+//     initialize, partOf, meta, property, method, nameBy,
+//     Utils: { _ }
+//   } = Module.NS;
 
-    @property $filter: ?object = null;
 
-    @property $collect: ?object = null;
+//   @initialize
+//   @partOf(Module)
+//   class Query extends CoreObject implements QueryInterface {
+//     @nameBy static  __filename = __filename;
+//     @meta static object = {};
 
-    @property $into: ?(string | object) = null;
+//     // TODO: это надо переделать на нормальную проверку типа в $filter - т.е. сделать спец flow тип
+//     // static operatorsMap: object = {
+//     //   $and: Array,
+//     //   $or: Array,
+//     //   $not: Object,
+//     //   $nor: Array, // not or # !(a||b) === !a && !b
+//     //
+//     //   // без вложенных условий и операторов - value конечное значение для сравнения
+//     //   $eq: AnyT, // ==
+//     //   $ne: AnyT, // !=
+//     //   $lt: AnyT, // <
+//     //   $lte: AnyT, // <=
+//     //   $gt: AnyT, // >
+//     //   $gte: AnyT, // >=
+//     //   $in: Array, // check value present in array
+//     //   $nin: Array, // ... not present in array
+//     //
+//     //   // field has array of values
+//     //   $all: Array, // contains some values
+//     //   $elemMatch: Object, // conditions for complex item
+//     //   $size: Number, // condition for array length
+//     //   $exists: Boolean, // condition for check present some value in field
+//     //   $type: String, // check value type
+//     //   $mod: Array, // [divisor, remainder] for example [4,0] делится ли на 4
+//     //   $regex: UnionG(RegExp, String), // value must be string. ckeck it by RegExp.
+//     //   $td: Boolean, // this day (today)
+//     //   $ld: Boolean, // last day (yesterday)
+//     //   $tw: Boolean, // this week
+//     //   $lw: Boolean, // last week
+//     //   $tm: Boolean, // this month
+//     //   $lm: Boolean, // last month
+//     //   $ty: Boolean, // this year
+//     //   $ly: Boolean // last year
+//     // }
 
-    @property $having: ?object = null;
+//     @property $forIn: ?object = null;
 
-    @property $sort: ?Array = null;
+//     @property $join: ?object = null;
 
-    @property $limit: ?number = null;
+//     @property $let: ?object = null;
 
-    @property $offset: ?number = null;
+//     @property $filter: ?object = null;
 
-    @property $avg: ?string = null; // '@doc.price'
+//     @property $collect: ?object = null;
 
-    @property $sum: ?string = null; // '@doc.price'
+//     @property $into: ?(string | object) = null;
 
-    @property $min: ?string = null; // '@doc.price'
+//     @property $having: ?object = null;
 
-    @property $max: ?string = null; // '@doc.price'
+//     @property $sort: ?Array = null;
 
-    @property $count: ?boolean = null; // yes or not present
+//     @property $limit: ?number = null;
 
-    @property $distinct: ?boolean = null; // yes or not present
+//     @property $offset: ?number = null;
 
-    @property $remove: ?(string | object) = null;
+//     @property $avg: ?string = null; // '@doc.price'
 
-    @property $patch: ?object = null;
+//     @property $sum: ?string = null; // '@doc.price'
 
-    @property $return: ?(string | object) = null;
+//     @property $min: ?string = null; // '@doc.price'
 
-    @method forIn(aoDefinitions: object): QueryInterface {
-      for (const k in aoDefinitions) {
-        if (!hasProp.call(aoDefinitions, k)) continue;
-        const v = aoDefinitions[k];
-        this.$forIn[k] = v;
-      }
-      return this;
-    }
+//     @property $max: ?string = null; // '@doc.price'
 
-    @method join(aoDefinitions: object): QueryInterface {
-      this.$join = aoDefinitions;
-      return this;
-    }
+//     @property $count: ?boolean = null; // yes or not present
 
-    @method filter(aoDefinitions: object): QueryInterface {
-      this.$filter = aoDefinitions;
-      return this;
-    }
+//     @property $distinct: ?boolean = null; // yes or not present
 
-    @method 'let'(aoDefinitions: object): QueryInterface {
-      if (this.$let == null) {
-        this.$let = {};
-      }
-      for (const k in aoDefinitions) {
-        if (!hasProp.call(aoDefinitions, k)) continue;
-        const v = aoDefinitions[k];
-        this.$let[k] = v;
-      }
-      return this;
-    }
+//     @property $remove: ?(string | object) = null;
 
-    @method collect(aoDefinition: object): QueryInterface {
-      this.$collect = aoDefinition;
-      return this;
-    }
+//     @property $patch: ?object = null;
 
-    @method into(aoDefinition: string | object): QueryInterface {
-      this.$into = aoDefinition;
-      return this;
-    }
+//     @property $return: ?(string | object) = null;
 
-    @method having(aoDefinition: object): QueryInterface {
-      this.$having = aoDefinition;
-      return this;
-    }
+//     @method forIn(aoDefinitions: object): QueryInterface {
+//       for (const k in aoDefinitions) {
+//         if (!hasProp.call(aoDefinitions, k)) continue;
+//         const v = aoDefinitions[k];
+//         this.$forIn[k] = v;
+//       }
+//       return this;
+//     }
 
-    @method sort(aoDefinition: object): QueryInterface {
-      if (this.$sort == null) {
-        this.$sort = [];
-      }
-      this.$sort.push(aoDefinition);
-      return this;
-    }
+//     @method join(aoDefinitions: object): QueryInterface {
+//       this.$join = aoDefinitions;
+//       return this;
+//     }
 
-    @method limit(anValue: number): QueryInterface {
-      this.$limit = anValue;
-      return this;
-    }
+//     @method filter(aoDefinitions: object): QueryInterface {
+//       this.$filter = aoDefinitions;
+//       return this;
+//     }
 
-    @method offset(anValue: number): QueryInterface {
-      this.$offset = anValue;
-      return this;
-    }
+//     @method 'let'(aoDefinitions: object): QueryInterface {
+//       if (this.$let == null) {
+//         this.$let = {};
+//       }
+//       for (const k in aoDefinitions) {
+//         if (!hasProp.call(aoDefinitions, k)) continue;
+//         const v = aoDefinitions[k];
+//         this.$let[k] = v;
+//       }
+//       return this;
+//     }
 
-    @method distinct(): QueryInterface {
-      this.$distinct = true;
-      return this;
-    }
+//     @method collect(aoDefinition: object): QueryInterface {
+//       this.$collect = aoDefinition;
+//       return this;
+//     }
 
-    @method remove(expr: ?(string | object) = 'all'): QueryInterface {
-      this.$remove = expr;
-      return this;
-    }
+//     @method into(aoDefinition: string | object): QueryInterface {
+//       this.$into = aoDefinition;
+//       return this;
+//     }
 
-    @method patch(aoDefinition: object): QueryInterface {
-      this.$patch = aoDefinition;
-      return this;
-    }
+//     @method having(aoDefinition: object): QueryInterface {
+//       this.$having = aoDefinition;
+//       return this;
+//     }
 
-    @method 'return'(aoDefinition: string | object): QueryInterface {
-      this.$return = aoDefinition;
-      return this;
-    }
+//     @method sort(aoDefinition: object): QueryInterface {
+//       if (this.$sort == null) {
+//         this.$sort = [];
+//       }
+//       this.$sort.push(aoDefinition);
+//       return this;
+//     }
 
-    @method count(): QueryInterface {
-      this.$count = true;
-      return this;
-    }
+//     @method limit(anValue: number): QueryInterface {
+//       this.$limit = anValue;
+//       return this;
+//     }
 
-    @method avg(asDefinition: string): QueryInterface {
-      this.$avg = asDefinition;
-      return this;
-    }
+//     @method offset(anValue: number): QueryInterface {
+//       this.$offset = anValue;
+//       return this;
+//     }
 
-    @method min(asDefinition: string): QueryInterface {
-      this.$min = asDefinition;
-      return this;
-    }
+//     @method distinct(): QueryInterface {
+//       this.$distinct = true;
+//       return this;
+//     }
 
-    @method max(asDefinition: string): QueryInterface {
-      this.$max = asDefinition;
-      return this;
-    }
+//     @method remove(expr: ?(string | object) = 'all'): QueryInterface {
+//       this.$remove = expr;
+//       return this;
+//     }
 
-    @method sum(asDefinition: string): QueryInterface {
-      this.$sum = asDefinition;
-      return this;
-    }
+//     @method patch(aoDefinition: object): QueryInterface {
+//       this.$patch = aoDefinition;
+//       return this;
+//     }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): QueryInterface {
-      if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
-        return this.new(replica.query);
-      } else {
-        return await super.restoreObject(acModule, replica);
-      }
-    }
+//     @method 'return'(aoDefinition: string | object): QueryInterface {
+//       this.$return = aoDefinition;
+//       return this;
+//     }
 
-    @method static async replicateObject(instance: QueryInterface): object {
-      const replica = await super.replicateObject(instance);
-      replica.query = instance.toJSON();
-      return replica;
-    }
+//     @method count(): QueryInterface {
+//       this.$count = true;
+//       return this;
+//     }
 
-    @method toJSON(): object {
-      const res = {};
-      for (const k of [
-        '$forIn', '$join', '$let', '$filter', '$collect', '$into', '$having', '$sort', '$limit', '$offset', '$avg', '$sum', '$min', '$max', '$count', '$distinct', '$remove', '$patch', '$return'
-      ]) {
-        if (this[k] != null) {
-          res[k] = this[k];
-        }
-      }
-      return res;
-    }
+//     @method avg(asDefinition: string): QueryInterface {
+//       this.$avg = asDefinition;
+//       return this;
+//     }
 
-    constructor(aoQuery: ?object) {
-      super(... arguments);
-      this.$forIn = {};
-      if (aoQuery != null) {
-        for (const key in aoQuery) {
-          if (!hasProp.call(aoQuery, key)) continue;
-          const value = aoQuery[key];
-          this[key] = value;
-        }
-      }
-    }
-  }
-}
+//     @method min(asDefinition: string): QueryInterface {
+//       this.$min = asDefinition;
+//       return this;
+//     }
+
+//     @method max(asDefinition: string): QueryInterface {
+//       this.$max = asDefinition;
+//       return this;
+//     }
+
+//     @method sum(asDefinition: string): QueryInterface {
+//       this.$sum = asDefinition;
+//       return this;
+//     }
+
+//     @method static async restoreObject(acModule: Class<Module>, replica: object): QueryInterface {
+//       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
+//         return this.new(replica.query);
+//       } else {
+//         return await super.restoreObject(acModule, replica);
+//       }
+//     }
+
+//     @method static async replicateObject(instance: QueryInterface): object {
+//       const replica = await super.replicateObject(instance);
+//       replica.query = instance.toJSON();
+//       return replica;
+//     }
+
+//     @method toJSON(): object {
+//       const res = {};
+//       for (const k of [
+//         '$forIn', '$join', '$let', '$filter', '$collect', '$into', '$having', '$sort', '$limit', '$offset', '$avg', '$sum', '$min', '$max', '$count', '$distinct', '$remove', '$patch', '$return'
+//       ]) {
+//         if (this[k] != null) {
+//           res[k] = this[k];
+//         }
+//       }
+//       return res;
+//     }
+
+//     constructor(aoQuery: ?object) {
+//       super(... arguments);
+//       this.$forIn = {};
+//       if (aoQuery != null) {
+//         for (const key in aoQuery) {
+//           if (!hasProp.call(aoQuery, key)) continue;
+//           const value = aoQuery[key];
+//           this[key] = value;
+//         }
+//       }
+//     }
+//   }
+// }
