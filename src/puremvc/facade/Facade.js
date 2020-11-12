@@ -267,18 +267,18 @@ export default (Module) => {
       }
     }
 
-    @method async notifyObservers(aoNotification: NotificationInterface): Promise<void> {
+    @method async notifyObservers<T = ?any>(aoNotification: NotificationInterface<T>): Promise<void> {
       if (this._view) {
         await this._view.notifyObservers(aoNotification);
       }
     }
 
-    @method async sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void> {
+    @method async sendNotification<T = ?any>(asName: string, aoBody: T, asType: ?string): Promise<void> {
       await this.notifyObservers(Module.NS.Notification.new(asName, aoBody, asType));
     }
 
-    @method async send(...args): Promise<void> {
-      await this.sendNotification(...args);
+    @method async send<T = ?any>(asName: string, aoBody: T, asType: ?string): Promise<void> {
+      await this.sendNotification(asName, aoBody, asType);
     }
 
     @method async run(scriptName: string, data?: any): Promise<?any> {

@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-export interface NotificationInterface {
+export interface NotificationInterface<T = ?any> {
   getName(): string;
 
-  setBody(aoBody: ?any): ?any;
+  setBody(aoBody: T): T;
 
-  getBody(): ?any;
+  getBody(): T;
 
   setType(asType: string): string;
 

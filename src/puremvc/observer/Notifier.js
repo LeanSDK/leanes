@@ -27,7 +27,7 @@ export default (Module) => {
   @initialize
   @injectable()
   @partOf(Module)
-  class Notifier extends CoreObject implements NotifierInterface {
+  class Notifier<T = ?any> extends CoreObject implements NotifierInterface<T> {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
@@ -67,7 +67,7 @@ export default (Module) => {
       return Module.NS.Facade.getInstance(this._multitonKey);
     }
 
-    @method async sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void> {
+    @method async sendNotification<T = ?any>(asName: string, aoBody: T, asType: ?string): Promise<void> {
       if (this.facade != null) {
         await this.facade.sendNotification(asName, aoBody, asType);
       }
@@ -77,7 +77,7 @@ export default (Module) => {
       await this.sendNotification(... arguments);
     }
 
-    @method async run(scriptName: string, data?: any): Promise<?any> {
+    @method async run<T = ?any>(scriptName: string, data: T): Promise<?any> {
       return await this.facade.run(scriptName, data);
     }
 

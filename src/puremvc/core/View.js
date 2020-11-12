@@ -115,7 +115,7 @@ export default (Module) => {
       }
     }
 
-    @method async notifyObservers(aoNotification: NotificationInterface): Promise<void> {
+    @method async notifyObservers<T = ?any>(aoNotification: NotificationInterface<T>): Promise<void> {
       const vsNotificationName = aoNotification.getName();
       const vlObservers = this._observerMap[vsNotificationName];
       if (vlObservers != null) {

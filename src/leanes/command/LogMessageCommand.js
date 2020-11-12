@@ -29,7 +29,7 @@ export default (Module) => {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method execute(aoNotification: NotificationInterface): void {
+    @method execute<T = ?any>(aoNotification: NotificationInterface<T>): void {
       const proxy = this.facade.getProxy(LOGGER_PROXY);
       proxy.addLogEntry(aoNotification.getBody());
       return;

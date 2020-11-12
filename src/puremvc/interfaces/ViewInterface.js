@@ -23,7 +23,7 @@ export interface ViewInterface {
 
   removeObserver(asNotificationName: string, aoNotifyContext: ControllerInterface | MediatorInterface): void;
 
-  notifyObservers(aoNotification: NotificationInterface): ?Promise<void>;
+  notifyObservers<T = ?any>(aoNotification: NotificationInterface<T>): ?Promise<void>;
 
   registerMediator(aoMediator: MediatorInterface): void;
 

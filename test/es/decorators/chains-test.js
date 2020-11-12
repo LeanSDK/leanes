@@ -21,14 +21,14 @@ describe('chains', () => {
       expect(() => {
 
         @initialize
-        @chains()
+        @chains(['create', 'update'])
         class Test extends LeanES {
           @nameBy static __filename = 'Test';
           @meta static object = {};
         }
       }).to.throw(Error);
     });
-    it('should decorator `freeze` without error', () => {
+    it('should decorator `chains` without error', () => {
       expect(() => {
 
         @initialize

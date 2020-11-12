@@ -72,7 +72,7 @@ export default (Module) => {
 
     @method listNotificationInterests(): Array { return []; }
 
-    @method handleNotification(aoNotification: NotificationInterface): ?Promise<void> { return; }
+    @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): ?Promise<void> { return; }
 
     @method onRegister(): void  { return; }
 

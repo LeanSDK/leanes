@@ -53,7 +53,7 @@ export default (Module) => {
       return object === this._context;
     }
 
-    @method async notifyObserver(notification: NotificationInterface): Promise<void> {
+    @method async notifyObserver<T = ?any>(notification: NotificationInterface<T>): Promise<void> {
       await this.getNotifyMethod().call(this.getNotifyContext(), notification);
     }
 

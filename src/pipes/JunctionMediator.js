@@ -46,7 +46,7 @@ export default (Module) => {
       ];
     }
 
-    @method handleNotification(aoNotification: NotificationInterface): void {
+    @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): void {
       const pipeName = aoNotification.getType();
       switch (aoNotification.getName()) {
         case JunctionMediator.ACCEPT_INPUT_PIPE:

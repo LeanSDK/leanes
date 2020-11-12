@@ -30,9 +30,9 @@ export default (Module) => {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method async body(data: ?any): Promise<?any> { return; }
+    @method async body<T = ?any>(data: T): Promise<?any> { return; }
 
-    @method async execute(aoNotification: NotificationInterface): void {
+    @method async execute<T = ?any>(aoNotification: NotificationInterface<T>): void {
       const voBody = aoNotification.getBody();
       const reverse = aoNotification.getType();
       let voResult = null;

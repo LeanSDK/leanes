@@ -25,13 +25,13 @@ export default (Module) => {
 
   @initialize
   @partOf(Module)
-  class Notification extends CoreObject implements NotificationInterface {
+  class Notification<T = ?any> extends CoreObject implements NotificationInterface<T> {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
     @property _name: string = null;
 
-    @property _body: ?any = null;
+    @property _body: T = null;
 
     @property _type: ?string = null;
 
@@ -39,12 +39,12 @@ export default (Module) => {
       return this._name;
     }
 
-    @method setBody(aoBody: ?any): ?any {
+    @method setBody(aoBody: T): T {
       this._body = aoBody;
       return aoBody;
     }
 
-    @method getBody(): ?any {
+    @method getBody(): T {
       return this._body;
     }
 
@@ -61,7 +61,7 @@ export default (Module) => {
       return `Notification Name: ${this.getName()}\nBody: ${(this.getBody() != null ? this.getBody().toString() : 'null')}\nType: ${(this.getType() != null ? this.getType() : 'null')}`;
     }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): NotificationInterface {
+    @method static async restoreObject(acModule: Class<Module>, replica: object): NotificationInterface<T> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const { name, body, type } = replica.notification;
         const instance = this.new(name, body, type);
@@ -71,7 +71,7 @@ export default (Module) => {
       }
     }
 
-    @method static async replicateObject(instance: NotificationInterface): object {
+    @method static async replicateObject(instance: NotificationInterface<T>): object {
       const replica = await super.replicateObject(instance);
       replica.notification = {
         name: instance.getName(),
@@ -81,7 +81,7 @@ export default (Module) => {
       return replica;
     }
 
-    constructor(asName: string, aoBody: ?any, asType: ?string) {
+    constructor(asName: string, aoBody: T, asType: ?string) {
       super(... arguments);
       this._name = asName;
       this._body = aoBody;

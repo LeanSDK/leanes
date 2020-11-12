@@ -24,7 +24,7 @@ export interface MediatorInterface {
 
   listNotificationInterests(): Array;
 
-  handleNotification(aoNotification: NotificationInterface): ?Promise<void>;
+  handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): ?Promise<void>;
 
   onRegister(): void;
 
