@@ -1,7 +1,8 @@
 const chai = require("chai");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'dev' ? "../../../lib/index.dev" : "../../../src/leanes/index.js";
+const LeanES = require(path).default;
 const { Notification } = LeanES.NS;
 
 const NOTIFICATION_NAME = 'TEST_NOTIFICATION';

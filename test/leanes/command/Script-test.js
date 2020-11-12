@@ -1,7 +1,8 @@
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
 const EventEmitter = require('events');
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'dev' ? "../../../lib/index.dev" : "../../../src/leanes/index.js";
+const LeanES = require(path).default;
 const {
   Script,
   initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action

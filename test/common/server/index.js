@@ -3,7 +3,8 @@ const URL = require('url');
 const querystring = require('querystring');
 const _ = require('lodash');
 const inflect = require('i')();
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'dev' ? "../../../lib/index.dev" : "../../../src/leanes/index.js";
+const LeanES = require(path).default;
 
 module.exports = function (options) {
   const server = {

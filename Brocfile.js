@@ -12,7 +12,7 @@ const appRoot = __dirname + '/src';
 
 const extensions = [".ts", ".js"];
 
-let js = new Rollup(appRoot, {
+const js = new Rollup(appRoot, {
   inputFiles: ["**/*.js"],
   annotation: "LeanES",
   rollup: {
@@ -100,6 +100,6 @@ let js = new Rollup(appRoot, {
 
 
 // Remove the existing module.exports and replace with:
-let tree = mergeTrees([js], { annotation: "Final output" });
+const tree = mergeTrees([js], { annotation: "Final output" });
 
 module.exports = tree;
