@@ -1,5 +1,3 @@
-
-// Brocfile.js
 const funnel = require('broccoli-funnel');
 const mergeTrees = require('broccoli-merge-trees');
 const Rollup = require("broccoli-rollup");
@@ -8,12 +6,12 @@ const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
 const globals = require('rollup-plugin-node-globals');
+const { terser } = require('rollup-plugin-terser');
 
 const appRoot = __dirname + '/src';
 
 const extensions = [".ts", ".js"];
 
-// Compile JS through rollup
 let js = new Rollup(appRoot, {
   inputFiles: ["**/*.js"],
   annotation: "LeanES",
@@ -33,10 +31,10 @@ let js = new Rollup(appRoot, {
       json({
         extensions,
         include: 'node_modules/**',
-        preferConst: true, // Default: false
+        preferConst: true,
         indent: '  ',
-        compact: true, // Default: false
-        namedExports: true // Default: true
+        compact: true,
+        namedExports: true
       }),
       nodeResolve({
         extensions,
@@ -78,12 +76,25 @@ let js = new Rollup(appRoot, {
         baseDir: process.cwd() + "/src/"
       }),
     ],
-    output: {
-      name: "LeanES",
-      dir: __dirname + '/lib',
-      format: "cjs",
-      sourcemap: true,
-    },
+    output: [
+      {
+        dir: __dirname + '/lib',
+        entryFileNames: 'index.dev.js',
+        format: "cjs",
+        name: "LeanES",
+        sourcemap: true,
+      },
+      {
+        dir: __dirname + '/lib',
+        entryFileNames: 'index.min.js',
+        format: "cjs",
+        name: "LeanES",
+        sourcemap: true,
+        plugins: [
+          terser()
+        ]
+      }
+    ],
   }
 });
 

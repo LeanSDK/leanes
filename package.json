@@ -32,9 +32,9 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-syntax-decorators": "^7.10.4",
     "@babel/plugin-transform-flow-strip-types": "^7.9.0",
     "@babel/plugin-transform-runtime": "7.11.5",
-    "@babel/plugin-syntax-decorators": "^7.10.4",
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.11.5",
     "babel-plugin-flow-runtime": "^0.19.0",
@@ -53,6 +53,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
     "sinon": "^9.0.3"
   },
   "dependencies": {
@@ -71,8 +72,8 @@
     "error-inject": "1.0.0",
     "escape-html": "1.0.3",
     "feed": "^4.2.1",
-    "fresh": "0.5.2",
     "flow-runtime": "^0.17.0",
+    "fresh": "0.5.2",
     "http-errors": "^1.6.3",
     "i": "^0.3.5",
     "inversify": "^5.0.1",
