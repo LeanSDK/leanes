@@ -1,0 +1,9 @@
+[include]
+../puremvc/**/*
+
+[libs]
+./declares
+
+[options]
+all=true
+esproposal.decorators=ignore
