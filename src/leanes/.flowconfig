@@ -1,0 +1,9 @@
+[include]
+../puremvc/**/*
+../pipes/**/*
+
+[libs]
+./declares
+
+[options]
+all=true
