@@ -13,6 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-// import LeanES from './leanes';
-// export default LeanES;
+import LeanES from './leanes';
+export default LeanES;
 export * from './leanes';
