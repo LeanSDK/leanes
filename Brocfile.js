@@ -12,7 +12,7 @@ const appRoot = __dirname + '/src';
 
 const extensions = [".ts", ".js"];
 
-const js = new Rollup(appRoot, {
+const dev = new Rollup(appRoot, {
   inputFiles: ["**/*.js"],
   annotation: "LeanES",
   rollup: {
@@ -57,16 +57,16 @@ const js = new Rollup(appRoot, {
         ],
         plugins: [
           "@babel/plugin-syntax-flow",
-          "flow-runtime",
+          ["flow-runtime", {
+            "assert": true,
+            "annotate": true
+          }],
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
-          // 'transform-class-properties',
         ],
       }),
       globals({
-        // include: [__dirname + "/src/**"],
-        // exclude: [__dirname + 'node_modules/**'],
         sourceMap: false,
         process: false,
         buffer: false,
@@ -84,12 +84,77 @@ const js = new Rollup(appRoot, {
         name: "LeanES",
         sourcemap: true,
       },
+    ],
+  }
+});
+
+const prod = new Rollup(appRoot, {
+  inputFiles: ["**/*.js"],
+  annotation: "LeanES",
+  rollup: {
+    input: __dirname + "/src/index.js",
+    external: [
+      'crypto',
+      'net',
+      'dns',
+      'stream',
+      'buffer',
+      'events',
+      'querystring',
+      'url'
+    ],
+    plugins: [
+      json({
+        extensions,
+        include: 'node_modules/**',
+        preferConst: true,
+        indent: '  ',
+        compact: true,
+        namedExports: true
+      }),
+      nodeResolve({
+        extensions,
+        browser: true,
+        preferBuiltins: false,
+      }),
+      commonjs({
+        include: 'node_modules/**',
+        preferBuiltins: false
+      }),
+      babel({
+        extensions,
+        sourceMap: true,
+        babelrcRoots: [
+          "./src/**",
+        ],
+        exclude: "node_modules/**",
+        presets: [
+          "@babel/preset-env"
+        ],
+        plugins: [
+          "@babel/plugin-syntax-flow",
+          "@babel/plugin-transform-flow-strip-types",
+          ["@babel/plugin-proposal-decorators", { "legacy": true }],
+          ["@babel/plugin-proposal-class-properties", { "loose": true }],
+        ],
+      }),
+      globals({
+        sourceMap: false,
+        process: false,
+        buffer: false,
+        dirname: true,
+        filename: true,
+        global: false,
+        baseDir: process.cwd() + "/src/"
+      }),
+    ],
+    output: [
       {
         dir: __dirname + '/lib',
         entryFileNames: 'index.min.js',
         format: "cjs",
         name: "LeanES",
-        sourcemap: true,
+        sourcemap: false,
         plugins: [
           terser()
         ]
@@ -98,8 +163,10 @@ const js = new Rollup(appRoot, {
   }
 });
 
-
-// Remove the existing module.exports and replace with:
-const tree = mergeTrees([js], { annotation: "Final output" });
-
-module.exports = tree;
+module.exports = options => {
+  if (options.env == 'production') {
+    return mergeTrees([prod], { annotation: "Final output" });
+  } else if (options.env == 'development') {
+    return mergeTrees([dev], { annotation: "Final output" });
+  }
+};

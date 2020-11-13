@@ -14,7 +14,7 @@
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 import "reflect-metadata";
-import inversify from 'inversify';
+import * as inversify from 'inversify';
 import {
   injectable, decorate, inject, tagged, named, optional, unmanaged,
   multiInject, targetName
