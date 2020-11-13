@@ -42,7 +42,7 @@ export interface FacadeInterface {
 
   hasMediator(asMediatorName: string): boolean;
 
-  notifyObservers(aoNotification: NotificationInterface): Promise<void>;
+  notifyObservers<T = ?any>(aoNotification: NotificationInterface<T>): Promise<void>;
 
-  sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void>;
+  sendNotification<T = ?any>(asName: string, aoBody: T, asType: ?string): Promise<void>;
 }

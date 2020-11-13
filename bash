@@ -11,7 +11,7 @@ fi
 
 docker run --rm -it \
   -e APP_PATH=${APP_PATH} \
-  -v ${APP_PATH}/tmp:/tmp \
+  --mount type=tmpfs,destination=/tmp \
   -v ${APP_PATH}:/usr/src/leanes \
   -v ${APP_PATH}/.bash_history:/root/.bash_history \
   -w /usr/src/leanes \

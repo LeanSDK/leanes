@@ -116,7 +116,7 @@ export default (Module) => {
       return this.retrieveCommand(...args);
     }
 
-    @method executeCommand(aoNotification: NotificationInterface): void {
+    @method executeCommand<T = ?any>(aoNotification: NotificationInterface<T>): void {
       if (!aoNotification) {
         return;
       }

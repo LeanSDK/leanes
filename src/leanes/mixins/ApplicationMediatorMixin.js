@@ -39,7 +39,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method handleNotification(aoNotification: NotificationInterface): void {
+      @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): void {
         const vsName = aoNotification.getName();
         const voBody = aoNotification.getBody();
         const vsType = aoNotification.getType();
@@ -52,7 +52,7 @@ export default (Module) => {
         }
       }
 
-      @method async run(scriptName: string, data?: any): Promise<?any> {
+      @method async run<T = ?any>(scriptName: string, data: T): Promise<?any> {
         return await new Promise((resolve, reject) => {
           try {
             const reverse = genRandomAlphaNumbers(32);

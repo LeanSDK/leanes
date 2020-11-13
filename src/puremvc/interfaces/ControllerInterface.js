@@ -17,7 +17,7 @@ import type { NotificationInterface } from './NotificationInterface';
 
 export interface ControllerInterface {
 
-  executeCommand(aoNotification: NotificationInterface): void;
+  executeCommand<T = ?any>(aoNotification: NotificationInterface<T>): void;
 
   registerCommand(asNotificationName: string, aCommand: Class<*>): void;
 

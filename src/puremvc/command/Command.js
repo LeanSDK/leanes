@@ -32,7 +32,7 @@ export default (Module) => {
 
     @property _subCommands: Array<Class<CoreObject>> = null;
 
-    @method execute(aoNotification: NotificationInterface): void {
+    @method execute<T = ?any>(aoNotification: NotificationInterface<T>): void {
       const vlSubCommands = [... this._subCommands];
       for (const vCommand of vlSubCommands) {
         if (!this.facade.container.isBound(vCommand.name)) {

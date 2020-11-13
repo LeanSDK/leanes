@@ -16,5 +16,5 @@
 import type { NotificationInterface } from './NotificationInterface';
 
 export interface CommandInterface {
-  execute(note: NotificationInterface): ?Promise<void>;
+  execute<T = ?any>(note: NotificationInterface<T>): ?Promise<void>;
 }

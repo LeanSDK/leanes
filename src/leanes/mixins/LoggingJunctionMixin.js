@@ -46,7 +46,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method async handleNotification(note: NotificationInterface): Promise<void> {
+      @method async handleNotification<T = ?any>(note: NotificationInterface<T>): Promise<void> {
         let level;
         switch (note.getName()) {
           case SEND_TO_LOG:
