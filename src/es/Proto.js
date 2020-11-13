@@ -63,20 +63,20 @@ export default (NS) => {
       return vClass;
     }
 
-    static async restoreObject(acModule: Class<*>, replica: object): Promise<Proto> {
+    static async restoreObject(acModule: Class<*>, replica: {type: string, class: string}): Promise<Class<*>> {
       assert(replica != null, "Replica cann`t be empty");
       assert(replica.class != null, "Replica type is required");
       assert((replica != null ? replica.type : void 0) === 'class', `Replica type isn\`t \`class\`. It is \`${replica.type}\``);
-      return await acModule.prototype[replica.class];
+      return acModule.prototype[replica.class];
     }
 
-    static async replicateObject(acClass: Proto): Promise<object> {
+    static async replicateObject(acClass: Class<*>): Promise<{type: string, class: string}> {
       assert(acClass != null, "Argument cann`t be empty");
       const replica = {
         type: 'class',
         class: acClass.name
       };
-      return await replica;
+      return replica;
     }
 
     static clone(klass, options = {}) {

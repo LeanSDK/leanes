@@ -219,7 +219,7 @@ export default (NS) => {
       return this[cplExtensibles][this[cpsExtensibleSymbol]];
     }
 
-    static async restoreObject(acModule: Class<*>, replica: object): Promise<CoreObject> {
+    static async restoreObject(acModule: Class<*>, replica: {type: string, class: string}): Promise<CoreObject> {
       assert(replica != null, "Replica cann`t be empty");
       assert(replica.class != null, "Replica type is required");
       assert((replica != null ? replica.type : void 0) === 'instance', `Replica type isn\`t \`instance\`. It is \`${replica.type}\``);
@@ -235,13 +235,13 @@ export default (NS) => {
       return instance;
     }
 
-    static async replicateObject(aoInstance: CoreObject): Promise<object> {
+    static async replicateObject(aoInstance: CoreObject): Promise<{type: string, class: string}> {
       assert(aoInstance != null, "Argument cann`t be empty");
       const replica = {
         type: 'instance',
         class: aoInstance.constructor.name
       };
-      return await replica;
+      return replica;
     }
 
     // init(...args) {

@@ -14,7 +14,7 @@
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 export interface RecoverableStaticInterface<Module, Instance> {
-  restoreObject(acModule: Class<Module>, replica: object): Promise<Instance>;
+  restoreObject(acModule: Class<Module>, replica: {type: string, class: string}): Promise<Instance>;
 
-  replicateObject(instance: Instance): Promise<object>;
+  replicateObject(instance: Instance): Promise<{type: string, class: string}>;
 }
