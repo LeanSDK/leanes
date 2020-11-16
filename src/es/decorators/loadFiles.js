@@ -19,35 +19,43 @@ const cpoMetaObject = Symbol.for('~metaObject');
 const cphPathMap = Symbol.for('~pathMap');
 const cphFilesList = Symbol.for('~filesList');
 
-export default function loadFiles({ filesTreeSync }) {
+export default function loadFiles(Module) {
+  assert(Module[cpoMetaObject] != null, 'Target for `loadFiles` decorator must be a Class');
+  const {
+    FsUtils
+  } = Module.NS;
+  assert(FsUtils != null, 'Target for `loadFiles` decorator should has FsUtilsAddon');
+  const {
+    Utils: { filesTreeSync }
+  } = FsUtils.NS;
+
   (filesTreeSync: (string, ?object) => string[]);
-  return target => {
-    assert(target[cpoMetaObject] != null, 'Target for `loadFiles` decorator must be a Class');
-    const vsRoot = target.prototype.ROOT != null ? target.prototype.ROOT : '.';
-    const files = filesTreeSync(vsRoot, {
-      filesOnly: true
-    });
-    const [ pathMap, filesList ] = (files != null ? files : []).reduce(([cp, fp], i) => {
-      if (/\.[.]+$/.test(i) && !/^\./.test(i)) {
-        fp.push(i);
-      }
-      const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
-      const [blackhole, fileName] = vsPathMatch != null ? vsPathMatch : [];
-      if (fileName != null && !/^\./.test(i)) {
-        cp[fileName] = `${vsRoot}/${i.replace(/\.js/, '')}`;
-      }
-      return [cp, fp];
-    }, [{}, []]);
-    Reflect.defineProperty(target, cphPathMap, {
-      enumerable: true,
-      writable: true,
-      value: pathMap
-    });
-    Reflect.defineProperty(target, cphFilesList, {
-      enumerable: true,
-      writable: true,
-      value: filesList
-    });
-    return target;
-  }
-};
+
+  const vsRoot = Module.prototype.ROOT != null ? Module.prototype.ROOT : '.';
+  const files = filesTreeSync(vsRoot, {
+    filesOnly: true
+  });
+  const [ pathMap, filesList ] = (files != null ? files : []).reduce(([cp, fp], i) => {
+    if (/\.[.]+$/.test(i) && !/^\./.test(i)) {
+      fp.push(i);
+    }
+    const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
+    const [blackhole, fileName] = vsPathMatch != null ? vsPathMatch : [];
+    if (fileName != null && !/^\./.test(i)) {
+      cp[fileName] = `${vsRoot}/${i.replace(/\.js/, '')}`;
+    }
+    return [cp, fp];
+  }, [{}, []]);
+  Reflect.defineProperty(Module, cphPathMap, {
+    enumerable: true,
+    writable: true,
+    value: pathMap
+  });
+  Reflect.defineProperty(Module, cphFilesList, {
+    enumerable: true,
+    writable: true,
+    value: filesList
+  });
+
+  return Module;
+}
