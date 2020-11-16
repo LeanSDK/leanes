@@ -78,7 +78,7 @@ export default (Module) => {
 
     @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<MediatorInterface> {
+    @method static async restoreObject(acModule: Class<*>, replica: object): Promise<MediatorInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const mediator = facade.retrieveMediator(replica.mediatorName);

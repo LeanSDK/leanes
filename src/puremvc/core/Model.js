@@ -46,9 +46,9 @@ export default (Module) => {
 
     @property static _instanceMap: { [key: string]: ?ModelInterface } = {};
 
-    @property _ApplicationModule: ?Class<Module> = null;
+    @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
+    @property get ApplicationModule(): Class<*> {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {

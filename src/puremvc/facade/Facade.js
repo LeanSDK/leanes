@@ -57,9 +57,9 @@ export default (Module) => {
       return this._container;
     }
 
-    @property _ApplicationModule: ?Class<Module> = null;
+    @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
+    @property get ApplicationModule(): Class<*> {
       if (this._ApplicationModule != null) {
         return this._ApplicationModule;
       } else {
@@ -309,7 +309,7 @@ export default (Module) => {
       await Facade._instanceMap[key].remove();
     }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<FacadeInterface> {
+    @method static async restoreObject(acModule: Class<*>, replica: object): Promise<FacadeInterface> {
       if ((replica != null ? replica.class : undefined) === this.name && (replica != null ? replica.type : undefined) === 'instance') {
         if (Facade._instanceMap[replica.multitonKey] == null) {
           acModule.NS[replica.application].new();
