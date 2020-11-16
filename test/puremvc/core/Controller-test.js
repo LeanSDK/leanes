@@ -6,7 +6,7 @@ const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../
 const LeanES = require(path).default;
 const {
   APPLICATION_MEDIATOR,
-  NotificationInterface, Controller, Command, Notification,
+  Controller, Command, Notification,
   initialize, partOf, nameBy, meta, method, property,
   Utils: { inversify: { Container } }
 } = LeanES.NS;

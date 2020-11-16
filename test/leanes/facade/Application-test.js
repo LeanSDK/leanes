@@ -2,7 +2,6 @@ const { assert } = require('chai');
 const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
 const LeanES = require(path).default;
 const {
-  FacadeInterface,
   initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 

@@ -2,7 +2,7 @@
   "name": "@leansdk/leanes",
   "version": "7.0.0",
   "description": "LeanES is a MVC framework for creating graceful applications",
-  "main": "lib/index.dev.js",
+  "main": "lib/index.min.js",
   "license": "LGPL-3.0",
   "scripts": {
     "build": "broccoli build --dev; broccoli build --prod",

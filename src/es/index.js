@@ -217,6 +217,6 @@ export type {TransitionInterface} from './interfaces/TransitionInterface';
 export type {EventInterface} from './interfaces/EventInterface';
 export type {StateInterface} from './interfaces/StateInterface';
 export type {StateMachineInterface} from './interfaces/StateMachineInterface';
-export type {RecoverableStaticInterface} from './interfaces/RecoverableStaticInterface';
+export type {CoreObjectInterface} from './interfaces/CoreObjectInterface';
 
 export default ES;

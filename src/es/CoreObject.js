@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-import type { RecoverableStaticInterface } from './interfaces/RecoverableStaticInterface';
+import type { CoreObjectInterface } from './interfaces/CoreObjectInterface';
 
 const slice = [].slice;
 const hasProp = {}.hasOwnProperty;
@@ -38,8 +38,10 @@ export default (NS) => {
   const cplExtensibles = Symbol.for('~isExtensible');
   const cpsExtensibleSymbol = Symbol.for('~extensibleSymbol');
 
-  class CoreObject {
+  class CoreObject implements CoreObjectInterface {
     static Module = NS;
+
+    _rootConstructor = 'CoreObject';
     // Core class API
     // static get 'super'() {
     //   const SuperClass = Reflect.getPrototypeOf(this);
@@ -153,7 +155,7 @@ export default (NS) => {
       return this[cpoMetaObject];
     }
 
-    static new(...args) {
+    static new(...args): CoreObjectInterface {
       return Reflect.construct(this, args);
     }
 
@@ -175,15 +177,15 @@ export default (NS) => {
 
     // General class API
 
-    get Module() {
+    get Module(): Class<*> {
       return this.constructor.Module;
     }
 
-    static moduleName() {
+    static moduleName(): string {
       return this.Module.name;
     }
 
-    moduleName() {
+    moduleName(): string {
       return this.Module.name;
     }
 
@@ -219,7 +221,9 @@ export default (NS) => {
       return this[cplExtensibles][this[cpsExtensibleSymbol]];
     }
 
-    static async restoreObject(acModule: Class<*>, replica: {type: string, class: string}): Promise<CoreObject> {
+    static async restoreObject<
+      C = CoreObjectInterface, R = {type: string, class: string}, M = Class<*>
+    >(acModule: M, replica: R): Promise<C> {
       assert(replica != null, "Replica cann`t be empty");
       assert(replica.class != null, "Replica type is required");
       assert((replica != null ? replica.type : void 0) === 'instance', `Replica type isn\`t \`instance\`. It is \`${replica.type}\``);
@@ -229,13 +233,14 @@ export default (NS) => {
         instance = this.new();
       } else {
         const vcClass = acModule.prototype[replica.class];
-        (vcClass: Class<{restoreObject: $PropertyType<RecoverableStaticInterface<vcClass>, 'restoreObject'>}>);
         instance = await vcClass.restoreObject(acModule, replica);
       }
       return instance;
     }
 
-    static async replicateObject(aoInstance: CoreObject): Promise<{type: string, class: string}> {
+    static async replicateObject<
+      C = CoreObjectInterface, R = {type: string, class: string}
+    >(aoInstance: C): Promise<R> {
       assert(aoInstance != null, "Argument cann`t be empty");
       const replica = {
         type: 'instance',

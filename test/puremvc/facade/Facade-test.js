@@ -72,7 +72,7 @@ describe('Facade', () => {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
 
-        @method execute(voNotification: LeanES.NS.NotificationInterface) {
+        @method execute(voNotification) {
             spy();
         }
       }

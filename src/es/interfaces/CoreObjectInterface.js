@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
-export interface RecoverableStaticInterface<CustomClass> {
-  restoreObject(acModule: Class<$PropertyType<CustomClass, 'Module'>>, replica: {type: string, class: string}): Promise<CustomClass>;
-
-  replicateObject(instance: CustomClass): Promise<{type: string, class: string}>;
+export interface CoreObjectInterface {
+  _rootConstructor: 'CoreObject';
 }
