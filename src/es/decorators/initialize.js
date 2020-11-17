@@ -47,7 +47,7 @@ export default function initialize(acTarget) {
       value: Wrapped
     });
     acTarget.Module.metaObject.addMetaData('constants', Wrapped.name, Wrapped);
-  } else if (acTarget.Module === acTarget && acTarget.name === 'Module') {
+  } else if (acTarget.Module === acTarget) {
     Reflect.defineProperty(acTarget.prototype, acTarget.name, {
       configurable: false,
       enumerable: true,
