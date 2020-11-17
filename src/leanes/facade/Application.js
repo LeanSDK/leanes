@@ -56,7 +56,7 @@ export default (Module) => {
       return await appMediator.run(scriptName, data);
     }
 
-    constructor(name: string, ApplicationFacade: Class<Facade>, symbol: ?Symbol) {
+    constructor(name: string, ApplicationFacade: Class<*>, symbol: ?Symbol) {
       const isLightweight = symbol === LIGHTWEIGHT;
       if (isLightweight) {
         const appName = `${name}|>${uuid.v4()}`

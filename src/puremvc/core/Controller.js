@@ -38,7 +38,7 @@ export default (Module) => {
     @property static MULTITON_MSG: string = 'Controller instance for this multiton key already constructed!';
 
     @property _view: ViewInterface = null;
-    @property _commandMap: {[key: string]: ?Class<CoreObject>} = null;
+    @property _commandMap: {[key: string]: ?Class<*>} = null;
     @property _classNames: {[key: string]: ?string} = null;
     @property _multitonKey: ?string = null;
 
@@ -127,7 +127,7 @@ export default (Module) => {
       }
     }
 
-    @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
+    @method registerCommand(asNotificationName: string, aCommand: Class<*>): void {
       if (!this._commandMap[asNotificationName]) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._commandMap[asNotificationName] = aCommand;

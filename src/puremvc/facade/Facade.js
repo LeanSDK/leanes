@@ -131,7 +131,7 @@ export default (Module) => {
       delete Facade._instanceMap[this._multitonKey];
     }
 
-    @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
+    @method registerCommand(asNotificationName: string, aCommand: Class<*>): void {
       this._controller.registerCommand(asNotificationName, aCommand);
     }
 
