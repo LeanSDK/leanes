@@ -1,5 +1,3 @@
-read-file
-
 AdminingResourceMixin
 BulkMethodsCollectionMixin
 BulkMethodsResourceMixin
