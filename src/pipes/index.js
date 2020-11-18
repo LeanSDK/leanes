@@ -15,26 +15,41 @@
 
 import PureMVC from '../puremvc';
 
-import PipeTF from './Pipe';
-import PipeMessageTF from './PipeMessage';
-import PipeListenerTF from './PipeListener';
-import FilterControlMessageTF from './FilterControlMessage';
-import LogMessageTF from './LogMessage';
-import LogFilterMessageTF from './LogFilterMessage';
-import FilterTF from './Filter';
-import JunctionTF from './Junction';
-import JunctionMediatorTF from './JunctionMediator';
-import PipeAwareModuleTF from './PipeAwareModule';
-import LineControlMessageTF from './LineControlMessage';
-import LineTF from './Line';
-import TeeMergeTF from './TeeMerge';
-import TeeSplitTF from './TeeSplit';
+import Pipe from './Pipe';
+import PipeMessage from './PipeMessage';
+import PipeListener from './PipeListener';
+import FilterControlMessage from './FilterControlMessage';
+import LogMessage from './LogMessage';
+import LogFilterMessage from './LogFilterMessage';
+import Filter from './Filter';
+import Junction from './Junction';
+import JunctionMediator from './JunctionMediator';
+import PipeAwareModule from './PipeAwareModule';
+import LineControlMessage from './LineControlMessage';
+import Line from './Line';
+import TeeMerge from './TeeMerge';
+import TeeSplit from './TeeSplit';
 
 export type { PipeAwareInterface } from './interfaces/PipeAwareInterface';
 export type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 export type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 
 const { initialize, meta, nameBy, freeze, resolver, constant } = PureMVC.NS;
+
+@TeeSplit
+@TeeMerge
+@Line
+@LineControlMessage
+@PipeAwareModule
+@JunctionMediator
+@Junction
+@Filter
+@LogFilterMessage
+@LogMessage
+@FilterControlMessage
+@PipeListener
+@PipeMessage
+@Pipe
 
 @initialize
 @resolver(require, name => require(name))
@@ -44,20 +59,5 @@ class Pipes extends PureMVC {
 
   @constant ROOT = __dirname;
 }
-
-PipeTF(Pipes);
-PipeMessageTF(Pipes);
-PipeListenerTF(Pipes);
-FilterControlMessageTF(Pipes);
-LogMessageTF(Pipes);
-LogFilterMessageTF(Pipes);
-FilterTF(Pipes);
-JunctionTF(Pipes);
-JunctionMediatorTF(Pipes);
-PipeAwareModuleTF(Pipes);
-LineControlMessageTF(Pipes);
-LineTF(Pipes);
-TeeMergeTF(Pipes);
-TeeSplitTF(Pipes);
 
 export default freeze(Pipes);

@@ -18,21 +18,21 @@ import Pipes from '../pipes';
 import joi from 'joi-browser';
 import moment from 'moment';
 
-import genRandomAlphaNumbersTF from './utils/genRandomAlphaNumbers';
-import hashPasswordTF from './utils/hashPassword';
-import jwtDecodeTF from './utils/jwtDecode';
-import jwtEncodeTF from './utils/jwtEncode';
-import makeHashTF from './utils/makeHash';
-import makeSignatureTF from './utils/makeSignature';
-import requestTF from './utils/request';
-import verifyPasswordTF from './utils/verifyPassword';
+import genRandomAlphaNumbers from './utils/genRandomAlphaNumbers';
+import hashPassword from './utils/hashPassword';
+import jwtDecode from './utils/jwtDecode';
+import jwtEncode from './utils/jwtEncode';
+import makeHash from './utils/makeHash';
+import makeSignature from './utils/makeSignature';
+import request from './utils/request';
+import verifyPassword from './utils/verifyPassword';
 
-import ApplicationMediatorMixinTF from './mixins/ApplicationMediatorMixin';
-import LoggingJunctionMixinTF from './mixins/LoggingJunctionMixin';
+import ApplicationMediatorMixin from './mixins/ApplicationMediatorMixin';
+import LoggingJunctionMixin from './mixins/LoggingJunctionMixin';
 
-import ApplicationTF from './facade/Application';
-import LogMessageCommandTF from './command/LogMessageCommand';
-import ScriptTF from './command/Script';
+import Application from './facade/Application';
+import LogMessageCommand from './command/LogMessageCommand';
+import Script from './command/Script';
 
 export * from '../puremvc';
 export * from '../pipes';
@@ -54,6 +54,21 @@ const {
   initialize, meta, nameBy, constant, resolver, util, freeze,
 } = PureMVC.NS;
 
+@LoggingJunctionMixin
+@ApplicationMediatorMixin
+@LogMessageCommand
+@Script
+@Application
+
+@genRandomAlphaNumbers
+@hashPassword
+@jwtDecode
+@jwtEncode
+@makeHash
+@makeSignature
+@request
+@verifyPassword
+
 @initialize
 @resolver(require, name => require(name))
 class LeanES extends PureMVC {
@@ -74,20 +89,5 @@ class LeanES extends PureMVC {
 
   @constant Pipes = Pipes;
 }
-
-genRandomAlphaNumbersTF(LeanES);
-hashPasswordTF(LeanES);
-jwtDecodeTF(LeanES);
-jwtEncodeTF(LeanES);
-makeHashTF(LeanES);
-makeSignatureTF(LeanES);
-requestTF(LeanES);
-verifyPasswordTF(LeanES);
-
-ApplicationTF(LeanES);
-ScriptTF(LeanES);
-LogMessageCommandTF(LeanES);
-ApplicationMediatorMixinTF(LeanES);
-LoggingJunctionMixinTF(LeanES);
 
 export default freeze(LeanES);

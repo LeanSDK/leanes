@@ -21,21 +21,21 @@ import {
 } from 'inversify';
 import ES from '../es';
 
-import AdapterTF from './clean/Adapter';
-import CaseTF from './clean/Case';
-import SuiteTF from './clean/Suite';
+import Adapter from './clean/Adapter';
+import Case from './clean/Case';
+import Suite from './clean/Suite';
 
-import NotificationTF from './observer/Notification';
-import NotifierTF from './observer/Notifier';
-import ObserverTF from './observer/Observer'
-import ProxyTF from './proxy/Proxy'
-import MediatorTF from './mediator/Mediator';
-import CommandTF from './command/Command';
-import FacadeTF from './facade/Facade';
+import Notification from './observer/Notification';
+import Notifier from './observer/Notifier';
+import Observer from './observer/Observer'
+import Proxy from './proxy/Proxy'
+import Mediator from './mediator/Mediator';
+import Command from './command/Command';
+import Facade from './facade/Facade';
 
-import ViewTF from './core/View';
-import ModelTF from './core/Model';
-import ControllerTF from './core/Controller';
+import View from './core/View';
+import Model from './core/Model';
+import Controller from './core/Controller';
 
 export * from '../es';
 export type { AdapterInterface } from './interfaces/AdapterInterface';
@@ -60,6 +60,23 @@ const {
 
 decorate(injectable(), CoreObject);
 
+@Controller
+@Model
+@View
+
+@Facade
+@Command
+@Mediator
+@Proxy
+
+@Suite
+@Case
+@Adapter
+
+@Observer
+@Notifier
+@Notification
+
 @initialize
 @resolver(require, name => require(name))
 class PureMVC extends ES {
@@ -82,22 +99,5 @@ class PureMVC extends ES {
   @decorator multiInject = multiInject;
   @decorator targetName = targetName;
 }
-
-NotificationTF(PureMVC);
-NotifierTF(PureMVC);
-ObserverTF(PureMVC);
-
-AdapterTF(PureMVC);
-CaseTF(PureMVC);
-SuiteTF(PureMVC);
-
-ProxyTF(PureMVC);
-MediatorTF(PureMVC);
-CommandTF(PureMVC);
-FacadeTF(PureMVC);
-
-ViewTF(PureMVC);
-ModelTF(PureMVC);
-ControllerTF(PureMVC);
 
 export default PureMVC;
