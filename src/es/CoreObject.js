@@ -18,7 +18,7 @@ import type { CoreObjectInterface } from './interfaces/CoreObjectInterface';
 const slice = [].slice;
 const hasProp = {}.hasOwnProperty;
 
-var _class = null;
+let _class = null;
 
 import MetaObjectTF from './MetaObject';
 
