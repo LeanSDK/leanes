@@ -211,7 +211,7 @@ export default (Module) => {
       let vAdapter;
       const vsClassName = this._classNames[asKey];
       if (!_.isEmpty(vsClassName)) {
-        vAdapter = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+        vAdapter = this.ApplicationModule.NS[vsClassName];
       }
       if (vAdapter != null) {
         if (!this._container.isBound(asKey)) {
