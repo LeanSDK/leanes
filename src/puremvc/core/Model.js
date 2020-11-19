@@ -216,6 +216,7 @@ export default (Module) => {
       if (vAdapter != null) {
         if (!this._container.isBound(asKey)) {
           this._container.bind(asKey).to(vAdapter).inSingletonScope().onActivation((context, adapter) => {
+            adapter.setName(asKey);
             adapter.initializeNotifier(this._multitonKey);
             adapter.onRegister();
             return adapter;

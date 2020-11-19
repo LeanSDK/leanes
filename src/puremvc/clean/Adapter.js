@@ -31,6 +31,16 @@ export default (Module) => {
 
     @property _cleanType = 'adapter';
 
+    @property _name: string = null;
+
+    @method getName(): string {
+      return this._name;
+    }
+
+    @method setName(asName: string): void {
+      this._name = asName;
+    }
+
     @method onRegister(): void  { return; }
 
     @method async onRemove(): Promise<void> { return; }
