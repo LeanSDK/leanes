@@ -224,7 +224,7 @@ export default (Module) => {
     }
 
     @method getAdapter(asKey: string): ?AdapterInterface {
-      return this._model.getAdapter(asProxyName);
+      return this._model.getAdapter(asKey);
     }
 
     @method async removeAdapter(asKey: string): Promise<void> {
