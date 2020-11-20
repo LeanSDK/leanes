@@ -81,7 +81,9 @@ class LeanES extends PureMVC {
   @constant SCRIPT_RESULT = 'SCRIPT_RESULT';
   @constant STARTUP_COMPLETE = 'STARTUP_COMPLETE';
   @constant LIGHTWEIGHT = Symbol.for('LIGHTWEIGHT');
-  @constant SHELL = 'SHELL';
+  @constant SHELL = 'ShellJunctionMediator';
+  @constant LOGGER = 'LoggerJunctionMediator';
+  @constant LOGGER_MODULE = 'LoggerModuleMediator';
   @constant LOG_MSG = 'LOG_MSG';
 
   @util joi = joi;
