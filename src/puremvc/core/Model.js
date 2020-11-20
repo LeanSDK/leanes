@@ -138,7 +138,7 @@ export default (Module) => {
     @method retrieveProxy(asProxyName: string): ?ProxyInterface {
       if (this._proxyMap[asProxyName] == null) {
         const {
-          className, data = {}
+          className, data
         } = this._metaProxyMap[asProxyName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
@@ -147,7 +147,7 @@ export default (Module) => {
           }
           const voProxy: ProxyInterface = this._container.get(asProxyName);
           voProxy.setName(asProxyName);
-          voProxy.setData(data);
+          if (data != null) voProxy.setData(data);
           this.registerProxy(voProxy);
         }
       }

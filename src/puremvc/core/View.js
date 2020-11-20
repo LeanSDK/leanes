@@ -167,7 +167,7 @@ export default (Module) => {
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {
       if (this._mediatorMap[asMediatorName] == null) {
         const {
-          className, data = {}
+          className, data
         } = this._metaMediatorMap[asMediatorName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
@@ -176,7 +176,7 @@ export default (Module) => {
           }
           const voMediator: MediatorInterface = this._container.get(asMediatorName);
           voMediator.setName(asMediatorName);
-          voMediator.setViewComponent(data);
+          if (data != null) voMediator.setViewComponent(data);
           this.registerMediator(voMediator);
         }
       }
