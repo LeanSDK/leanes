@@ -45,6 +45,12 @@ export default (Module) => {
       this.facade.send(ACCEPT_OUTPUT_PIPE, aoPipe, asName);
     }
 
+    @method async send<T = ?any>(asName: string, aoBody: T, asType: ?string): Promise<void> {
+      if (this.facade != null) {
+        await this.facade.send(asName, aoBody, asType);
+      }
+    }
+
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);
     }

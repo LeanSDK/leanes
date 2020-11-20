@@ -39,7 +39,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): void {
+      @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): ?Promise<void> {
         const vsName = aoNotification.getName();
         const voBody = aoNotification.getBody();
         const vsType = aoNotification.getType();
