@@ -4,7 +4,7 @@ const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../
 const LeanES = require(path).default;
 const {
   LogMessageCommand,
-  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method,
 } = LeanES.NS;
 
 describe('LogMessageCommand', () => {

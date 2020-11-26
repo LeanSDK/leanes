@@ -33,16 +33,16 @@ export default function loadFiles(Module) {
 
   const vsRoot = Module.prototype.ROOT != null ? Module.prototype.ROOT : '.';
   const files = filesTreeSync(vsRoot, {
-    filesOnly: true
+    filesOnly: true, nosort: true
   });
   const [ pathMap, filesList ] = (files != null ? files : []).reduce(([cp, fp], i) => {
-    if (/\.[.]+$/.test(i) && !/^\./.test(i)) {
+    if (/.+[.]{1}.+$/.test(i) && !/^\./.test(i)) {
       fp.push(i);
     }
     const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
     const [blackhole, fileName] = vsPathMatch != null ? vsPathMatch : [];
     if (fileName != null && !/^\./.test(i)) {
-      cp[fileName] = `${vsRoot}/${i.replace(/\.js/, '')}`;
+      if (cp[fileName] == null) cp[fileName] = `${vsRoot}/${i.replace(/\.js/, '')}`;
     }
     return [cp, fp];
   }, [{}, []]);

@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
 const LeanES = require(path).default;
 const {
-  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant
+  initialize, partOf, nameBy, resolver, meta, mixin, constant
 } = LeanES.NS;
 
 describe('LoggingJunctionMixin', () => {

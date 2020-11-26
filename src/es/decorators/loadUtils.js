@@ -33,13 +33,13 @@ export default function loadUtils(Module) {
   const vsRoot = Module.prototype.ROOT != null ? Module.prototype.ROOT : '.';
   const vsUtilsDir = `${vsRoot}/utils`;
   const files = filesTreeSync(vsUtilsDir, {
-    filesOnly: true
+    filesOnly: true, nosort: true
   });
   const utilsMap = (files != null ? files : []).reduce((up, i) => {
     const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
     const [blackhole, utilName] = vsPathMatch != null ? vsPathMatch : [];
     if (utilName != null && !/^\./.test(i)) {
-      up[utilName] = `${vsUtilsDir}/${i.replace(/\.js/, '')}`;
+      if (up[utilName] == null) up[utilName] = `${vsUtilsDir}/${i.replace(/\.js/, '')}`;
     }
     return up;
   }, {});
