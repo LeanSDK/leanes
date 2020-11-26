@@ -18,6 +18,7 @@ const dev = new Rollup(appRoot, {
   rollup: {
     input: __dirname + "/src/index.js",
     external: [
+      'assert',
       'crypto',
       'net',
       'dns',
@@ -25,7 +26,8 @@ const dev = new Rollup(appRoot, {
       'buffer',
       'events',
       'querystring',
-      'url'
+      'url',
+      'util'
     ],
     plugins: [
       json({
@@ -94,6 +96,7 @@ const prod = new Rollup(appRoot, {
   rollup: {
     input: __dirname + "/src/index.js",
     external: [
+      'assert',
       'crypto',
       'net',
       'dns',
@@ -101,7 +104,8 @@ const prod = new Rollup(appRoot, {
       'buffer',
       'events',
       'querystring',
-      'url'
+      'url',
+      'util'
     ],
     plugins: [
       json({
