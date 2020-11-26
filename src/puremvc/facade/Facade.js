@@ -255,6 +255,10 @@ export default (Module) => {
       return this._view.getMediator(...args);
     }
 
+    @method activateMediator(name: string): void {
+      return this._view.activateMediator(name);
+    }
+
     @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
       if (this._view) {
         return await this._view.removeMediator(asMediatorName);

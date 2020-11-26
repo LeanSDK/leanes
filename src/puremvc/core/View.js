@@ -187,6 +187,10 @@ export default (Module) => {
       return this.retrieveMediator(...args);
     }
 
+    @method activateMediator(name: string): void {
+      this.retrieveMediator(name);
+    }
+
     @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
       const voMediator = this._mediatorMap[asMediatorName];
       if (voMediator == null) {
@@ -219,7 +223,7 @@ export default (Module) => {
 
     @method lazyRegisterMediator(asMediatorName: string, asMediatorClassName: ?string, ahData: ?any): void {
       this._metaMediatorMap[asMediatorName] = {
-        className: asMediatorClassName,
+        className: (asMediatorClassName != null ? asMediatorClassName : asMediatorName),
         data: ahData
       };
       if (!this._container.isBound(`Factory<${asMediatorName}>`)) {
