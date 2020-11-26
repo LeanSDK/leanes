@@ -73,6 +73,7 @@ export default (Module) => {
       constructor() {
         super(... arguments);
         this.emitter = new EventEmitter();
+        this.emitter.setMaxListeners(Number.MAX_SAFE_INTEGER);
       }
     }
     return Mixin;
