@@ -28,7 +28,7 @@ export default (NS) => {
   }
 
   const {
-    PRODUCTION, DEVELOPMENT, CLASS_KEYS, INSTANCE_KEYS,
+    PRODUCTION, DEVELOPMENT, CORE_OBJECT, CLASS_KEYS, INSTANCE_KEYS,
     _, inflect, assert,
   } = NS.prototype;
 
@@ -40,6 +40,8 @@ export default (NS) => {
 
   class CoreObject implements CoreObjectInterface {
     static Module = NS;
+
+    static CORE_OBJECT = CORE_OBJECT;
 
     _rootConstructor = 'CoreObject';
     // Core class API

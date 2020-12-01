@@ -27,7 +27,7 @@ export default (NS) => {
   }
 
   const {
-    PRODUCTION, DEVELOPMENT,
+    PRODUCTION, DEVELOPMENT, MODULE,
     MetaObject,
     _, inflect, assert, meta, nameBy,
   } = NS.prototype;
@@ -48,6 +48,8 @@ export default (NS) => {
   class Module extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
+
+    static MODULE = MODULE;
 
     static new() {
       assert.fail('new method unsupported for Module');

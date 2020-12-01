@@ -25,7 +25,7 @@ export default (NS) => {
   }
 
   const {
-    _, CLASS_KEYS, INSTANCE_KEYS,
+    _, PROTO, CLASS_KEYS, INSTANCE_KEYS,
     meta, nameBy,
     assert,
   } = NS.prototype;
@@ -35,6 +35,8 @@ export default (NS) => {
   class Proto extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
+
+    static PROTO = PROTO;
 
     static new(name, object) {
       const vClass = this.clone(CoreObject, {

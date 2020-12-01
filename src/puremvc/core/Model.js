@@ -20,7 +20,7 @@ import { Container } from 'inversify';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     CoreObject,
     assert,
     initialize, partOf, meta, property, method, nameBy,
@@ -46,29 +46,30 @@ export default (Module) => {
 
     @property static _instanceMap: { [key: string]: ?ModelInterface } = {};
 
-    @property _ApplicationModule: ?Class<*> = null;
+    // @property _ApplicationModule: ?Class<*> = null;
 
     @property get ApplicationModule(): Class<*> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return voFacade.Module;
-            }
-          } else {
-            return voFacade.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+      return this._container.get('ApplicationModule');
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
+      //     const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return voFacade.Module;
+      //       }
+      //     } else {
+      //       return voFacade.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @method static getInstance(asKey: string, container: Container): Model {

@@ -91,7 +91,7 @@ export default (Module) => {
     @method static async replicateObject(instance: MediatorInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
-      replica.mediatorName = instance.getMediatorName();
+      replica.mediatorName = instance.getName();
       return replica;
     }
 

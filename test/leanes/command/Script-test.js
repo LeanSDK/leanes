@@ -43,10 +43,14 @@ describe('Script', () => {
     });
   });
   describe('execute', () => {
+    let facade = null;
+    after(() => {
+      if(facade !== null) {
+        facade.remove();
+      }
+    });
     it('should run script', async () => {
       const KEY = 'TEST_SCRIPT_002';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
-      const trigger = new EventEmitter();
 
       @initialize
       class Test extends LeanES {
@@ -54,6 +58,8 @@ describe('Script', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root2`;
       }
+      facade = Test.NS.Facade.getInstance(KEY);
+      const trigger = new EventEmitter();
 
       @initialize
       @partOf(Test)
@@ -91,8 +97,6 @@ describe('Script', () => {
     });
     it('should fail script', async () => {
       const KEY = 'TEST_SCRIPT_003';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
-      const trigger = new EventEmitter();
 
       @initialize
       class Test extends LeanES {
@@ -100,6 +104,9 @@ describe('Script', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root2`;
       }
+
+      facade = Test.NS.Facade.getInstance(KEY);
+      const trigger = new EventEmitter();
 
       @initialize
       @partOf(Test)

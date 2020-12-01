@@ -68,6 +68,18 @@ describe('Facade', () => {
 
       @initialize
       @partOf(Test)
+      class ApplicationFacade extends LeanES.NS.Facade {
+        @nameBy static  __filename = 'ApplicationFacade';
+        @meta static object = {};
+
+        @method initializeFacade(): void {
+          super.initializeFacade();
+          this.rebind('ApplicationModule').toConstructor(this.Module);
+        }
+      }
+
+      @initialize
+      @partOf(Test)
       class TestCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
@@ -77,19 +89,19 @@ describe('Facade', () => {
         }
       }
 
-      @initialize
-      @partOf(Test)
-      class Application extends Test.NS.CoreObject {
-        @nameBy static  __filename = 'Application';
-        @meta static object = {};
-      }
+      // @initialize
+      // @partOf(Test)
+      // class Application extends Test.NS.CoreObject {
+      //   @nameBy static  __filename = 'Application';
+      //   @meta static object = {};
+      // }
 
-      facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
+      facade = Test.NS.ApplicationFacade.getInstance(INSTANCE_NAME);
       // facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
-      const mediator = Test.NS.Mediator.new();
-      mediator.setName(APPLICATION_MEDIATOR);
-      mediator.setViewComponent(Application.new());
-      facade.registerMediator(mediator);
+      // const mediator = Test.NS.Mediator.new();
+      // mediator.setName(APPLICATION_MEDIATOR);
+      // mediator.setViewComponent(Application.new());
+      // facade.registerMediator(mediator);
       const vsNotificationName = 'TEST_COMMAND2';
       facade.lazyRegisterCommand(vsNotificationName, 'TestCommand');
       assert(facade.hasCommand(vsNotificationName));
@@ -183,6 +195,18 @@ describe('Facade', () => {
 
       @initialize
       @partOf(Test)
+      class ApplicationFacade extends LeanES.NS.Facade {
+        @nameBy static  __filename = 'ApplicationFacade';
+        @meta static object = {};
+
+        @method initializeFacade(): void {
+          super.initializeFacade();
+          this.rebind('ApplicationModule').toConstructor(this.Module);
+        }
+      }
+
+      @initialize
+      @partOf(Test)
       class TestProxy extends LeanES.NS.Proxy {
         @nameBy static  __filename = 'TestProxy';
         @meta static object = {};
@@ -199,11 +223,11 @@ describe('Facade', () => {
         @meta static object = {};
       }
 
-      facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
-      const mediator = Test.NS.Mediator.new();
-      mediator.setName(APPLICATION_MEDIATOR);
-      mediator.setViewComponent(Application.new());
-      facade.registerMediator(mediator);
+      facade = Test.NS.ApplicationFacade.getInstance(INSTANCE_NAME);
+      // const mediator = Test.NS.Mediator.new();
+      // mediator.setName(APPLICATION_MEDIATOR);
+      // mediator.setViewComponent(Application.new());
+      // facade.registerMediator(mediator);
       const proxyData = {data: 'data'};
       facade.lazyRegisterProxy('TEST_PROXY', 'TestProxy', proxyData);
       assert.isFalse(onRegister.called, 'Proxy is already registered');
@@ -496,17 +520,23 @@ describe('Facade', () => {
         @nameBy static  __filename = 'ApplicationFacade';
         @meta static object = {};
         @property static _instanceMap = {};
+
+        @method initializeFacade(): void {
+          super.initializeFacade();
+          this.rebind('ApplicationModule').toConstructor(this.Module);
+        }
+
         @method startup(application) {
-          this.registerCommand(LeanES.NS.STARTUP, Test.NS.PrepareViewCommand);
+          // this.registerCommand(LeanES.NS.STARTUP, Test.NS.PrepareViewCommand);
           this.sendNotification(LeanES.NS.STARTUP, application);
         }
         @method finish() {}
-        @method static getInstance(asKey) {
-          if (Test.NS.Facade._instanceMap[asKey] == null) {
-            Test.NS.Facade._instanceMap[asKey] = this.new(asKey);
-          }
-          return Test.NS.Facade._instanceMap[asKey];
-        }
+        // @method static getInstance(asKey) {
+        //   if (Test.NS.Facade._instanceMap[asKey] == null) {
+        //     Test.NS.Facade._instanceMap[asKey] = this.new(asKey);
+        //   }
+        //   return Test.NS.Facade._instanceMap[asKey];
+        // }
       }
 
       @initialize
@@ -521,29 +551,26 @@ describe('Facade', () => {
       class TestApplication extends LeanES.NS.Application {
         @nameBy static  __filename = 'TestApplication';
         @meta static object = {};
-        @property static get NAME(): string {
-          return KEY;
-        }
 
         constructor() {
           const { ApplicationFacade } = Test.NS;
-          super(TestApplication.NAME, ApplicationFacade);
+          super(KEY, ApplicationFacade);
         }
       }
 
-      @initialize
-      @partOf(Test)
-      class PrepareViewCommand extends LeanES.NS.Command {
-        @nameBy static  __filename = 'PrepareViewCommand';
-        @meta static object = {};
-        @method execute(aoNotification) {
-          const voApplication = aoNotification.getBody();
-          const mediator = ApplicationMediator.new();
-          mediator.setName(APPLICATION_MEDIATOR);
-          mediator.setViewComponent(voApplication);
-          this.facade.registerMediator(mediator)
-        }
-      }
+      // @initialize
+      // @partOf(Test)
+      // class PrepareViewCommand extends LeanES.NS.Command {
+      //   @nameBy static  __filename = 'PrepareViewCommand';
+      //   @meta static object = {};
+      //   @method execute(aoNotification) {
+      //     const voApplication = aoNotification.getBody();
+      //     const mediator = ApplicationMediator.new();
+      //     mediator.setName(APPLICATION_MEDIATOR);
+      //     mediator.setViewComponent(voApplication);
+      //     this.facade.registerMediator(mediator)
+      //   }
+      // }
       application = new TestApplication();
       application.start();
       const replica = await ApplicationFacade.replicateObject(application.facade);
@@ -551,7 +578,7 @@ describe('Facade', () => {
         type: 'instance',
         class: 'ApplicationFacade',
         multitonKey: KEY,
-        application: 'TestApplication'
+        // application: 'TestApplication'
       });
     });
   });

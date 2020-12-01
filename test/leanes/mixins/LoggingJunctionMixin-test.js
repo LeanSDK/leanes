@@ -43,8 +43,8 @@ describe('LoggingJunctionMixin', () => {
       }
 
       @initialize
-      @mixin(LeanES.NS.LoggingJunctionMixin)
       @partOf(Test)
+      @mixin(LeanES.NS.LoggingJunctionMixin)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};

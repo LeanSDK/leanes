@@ -69,7 +69,7 @@ export default (Module) => {
     @method static async replicateObject(instance: ProxyInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
-      replica.proxyName = instance.getProxyName();
+      replica.proxyName = instance.getName();
       return replica;
     }
 

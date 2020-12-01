@@ -21,7 +21,7 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, partOf, meta, property, method, nameBy, injectable
+    initialize, partOf, meta, property, method, nameBy, injectable, inject
   } = Module.NS;
 
   @initialize
@@ -35,29 +35,32 @@ export default (Module) => {
 
     @property _multitonKey: ?string = null;
 
-    @property _ApplicationModule: ?Class<*> = null;
+    @inject('ApplicationModule')
+    @property _ApplicationModule: Class<*>;
 
     @property get ApplicationModule(): Class<*> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return voFacade.Module;
-            }
-          } else {
-            return voFacade.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+      return this._ApplicationModule;
+
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
+      //     const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return voFacade.Module;
+      //       }
+      //     } else {
+      //       return voFacade.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @property get facade(): FacadeInterface {

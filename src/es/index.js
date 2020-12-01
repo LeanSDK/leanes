@@ -80,6 +80,9 @@ const cphTemplatesList = Symbol.for('~templatesList');
 const cphFilesList = Symbol.for('~filesList');
 const cpoNamespace = Symbol.for('~namespace');
 
+const MODULE = Symbol.for('Module');
+const CORE_OBJECT = Symbol.for('CoreObject');
+const PROTO = Symbol.for('Proto');
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
 const CLASS_KEYS = [
@@ -100,6 +103,9 @@ const INSTANCE_KEYS = [
   Reflect.defineProperty(target.prototype, 'lodash', { value: lodash });
   Reflect.defineProperty(target.prototype, '_', { value: lodash });
   Reflect.defineProperty(target.prototype, 'inflect', { value: inflect });
+  Reflect.defineProperty(target.prototype, 'MODULE', { value: MODULE });
+  Reflect.defineProperty(target.prototype, 'CORE_OBJECT', { value: CORE_OBJECT });
+  Reflect.defineProperty(target.prototype, 'PROTO', { value: PROTO });
   Reflect.defineProperty(target.prototype, 'PRODUCTION', { value: PRODUCTION });
   Reflect.defineProperty(target.prototype, 'DEVELOPMENT', { value: DEVELOPMENT });
   Reflect.defineProperty(target.prototype, 'CLASS_KEYS', { value: CLASS_KEYS });
@@ -152,6 +158,9 @@ class ES extends _ES.prototype.Module {
 
   @constant ROOT = __dirname;
   @constant ENV = DEVELOPMENT;
+  @constant MODULE = MODULE;
+  @constant CORE_OBJECT = CORE_OBJECT;
+  @constant PROTO = PROTO;
   @constant PRODUCTION = PRODUCTION;
   @constant DEVELOPMENT = DEVELOPMENT;
   @constant CLASS_KEYS = CLASS_KEYS;
