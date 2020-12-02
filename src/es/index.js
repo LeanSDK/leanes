@@ -31,6 +31,7 @@ import initializeMixin from './decorators/initializeMixin';
 import initializePatch from './decorators/initializePatch';
 import mixin from './decorators/mixin';
 import patch from './decorators/patch';
+import extend from './decorators/extend';
 import plugin from './decorators/plugin';
 import meta from './decorators/meta';
 import partOf from './decorators/partOf';
@@ -188,6 +189,7 @@ class ES extends _ES.prototype.Module {
   @decorator initializePatch = initializePatch;
   @decorator mixin = mixin;
   @decorator patch = patch;
+  @decorator extend = extend;
   @decorator plugin = plugin;
   @decorator meta = meta;
   @decorator partOf = partOf;
