@@ -151,13 +151,14 @@ export default (Module) => {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._classNames[asNotificationName] = (asClassName != null ? asClassName : asNotificationName);
       }
-      if (!this._container.isBound(`Factory<${asNotificationName}>`)) {
-        this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveCommand(asNotificationName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asNotificationName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asNotificationName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveCommand(asNotificationName)
+        }
+      });
     }
 
     @method hasCommand(asNotificationName: string): boolean {
@@ -176,13 +177,14 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getCase(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getCase(asKey)
+        }
+      });
     }
 
     @method hasCase(asKey: string): boolean {
@@ -221,13 +223,14 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getSuite(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getSuite(asKey)
+        }
+      });
     }
 
     @method hasSuite(asKey: string): boolean {

@@ -227,13 +227,14 @@ export default (Module) => {
         className: (asMediatorClassName != null ? asMediatorClassName : asMediatorName),
         data: ahData
       };
-      if (!this._container.isBound(`Factory<${asMediatorName}>`)) {
-        this._container.bind(`Factory<${asMediatorName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveMediator(asMediatorName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asMediatorName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asMediatorName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveMediator(asMediatorName)
+        }
+      });
     }
 
     @method _initializeView(): void { return; }

@@ -168,26 +168,28 @@ export default (Module) => {
         className: (asProxyClassName != null ? asProxyClassName : asProxyName),
         data: ahData
       };
-      if (!this._container.isBound(`Factory<${asProxyName}>`)) {
-        this._container.bind(`Factory<${asProxyName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveProxy(asProxyName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asProxyName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asProxyName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveProxy(asProxyName)
+        }
+      });
     }
 
     @method addAdapter(asKey: string, asClassName: ?string): void {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getAdapter(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getAdapter(asKey)
+        }
+      });
     }
 
     @method hasAdapter(asKey: string): boolean {
