@@ -18,6 +18,7 @@ const dev = new Rollup(appRoot, {
   rollup: {
     input: __dirname + "/src/index.js",
     external: [
+      'axios', 'lodash', 'i', 'json-stable-stringify', 'joi-browser', 'moment', 'jsonwebtoken', 'inversify',
       'assert',
       'crypto',
       'net',
@@ -96,6 +97,7 @@ const prod = new Rollup(appRoot, {
   rollup: {
     input: __dirname + "/src/index.js",
     external: [
+      'axios', 'lodash', 'i', 'json-stable-stringify', 'joi-browser', 'moment', 'jsonwebtoken', 'inversify',
       'assert',
       'crypto',
       'net',
