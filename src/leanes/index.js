@@ -15,7 +15,7 @@
 
 import PureMVC from '../puremvc';
 import Pipes from '../pipes';
-import joi from 'joi-browser';
+import joi from 'joi';
 import moment from 'moment';
 
 import genRandomAlphaNumbers from './utils/genRandomAlphaNumbers';
