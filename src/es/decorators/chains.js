@@ -132,7 +132,7 @@ export default function chains(
           }
         }
 
-        @method async _callWithChainNameOnSingleAsync(methodName: string, actionName: string, singleData: ?any): any {
+        @method async _callWithChainNameOnSingleAsync(methodName: string, actionName: string, singleData: ?any): Promise<any> {
           if (_.isFunction(this[methodName])) {
             this[methodName].chainName = actionName;
             const res = await Promise.resolve(this[methodName](singleData));
@@ -143,7 +143,7 @@ export default function chains(
           }
         }
 
-        @method async _callWithChainNameOnArrayAsync(methodName: string, actionName: string, arrayData: Array): Array {
+        @method async _callWithChainNameOnArrayAsync(methodName: string, actionName: string, arrayData: Array): Promise<Array> {
           arrayData = _.castArray(arrayData);
           if (_.isFunction(this[methodName])) {
             this[methodName].chainName = actionName;
