@@ -41,7 +41,7 @@ const dev = new Rollup(appRoot, {
       }),
       nodeResolve({
         extensions,
-        browser: true,
+        browser: false,
         preferBuiltins: false,
       }),
       commonjs({
@@ -51,6 +51,7 @@ const dev = new Rollup(appRoot, {
       babel({
         extensions,
         sourceMap: true,
+        runtimeHelpers: true,
         babelrcRoots: [
           "./src/**",
         ],
@@ -67,6 +68,7 @@ const dev = new Rollup(appRoot, {
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
+          "@babel/plugin-transform-runtime",
         ],
       }),
       globals({
@@ -120,7 +122,7 @@ const prod = new Rollup(appRoot, {
       }),
       nodeResolve({
         extensions,
-        browser: true,
+        browser: false,
         preferBuiltins: false,
       }),
       commonjs({
@@ -129,7 +131,8 @@ const prod = new Rollup(appRoot, {
       }),
       babel({
         extensions,
-        sourceMap: true,
+        sourceMap: false,
+        runtimeHelpers: true,
         babelrcRoots: [
           "./src/**",
         ],
@@ -142,6 +145,7 @@ const prod = new Rollup(appRoot, {
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
+          "@babel/plugin-transform-runtime",
         ],
       }),
       globals({
