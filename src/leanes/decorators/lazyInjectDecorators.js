@@ -25,12 +25,12 @@ function _proxyGetter(
 ) {
   function getter() {
     if (doCache && !Reflect.hasMetadata(INJECTION, this, key)) {
-      Reflect.defineMetadata(INJECTION, resolve(), this, key);
+      Reflect.defineMetadata(INJECTION, resolve.call(this), this, key);
     }
     if (Reflect.hasMetadata(INJECTION, this, key)) {
       return Reflect.getMetadata(INJECTION, this, key);
     } else {
-      return resolve();
+      return resolve.call(this);
     }
   }
 
@@ -38,55 +38,55 @@ function _proxyGetter(
     Reflect.defineMetadata(INJECTION, newVal, this, key);
   }
 
-  Reflect.defineProperty(proto, key, {
+  return {
     configurable: true,
     enumerable: true,
     get: getter,
     set: setter
-  });
+  }
 }
 
 function lazyInject(serviceIdentifier, opts: ?object = {}) {
-  return function(proto: any, key: string): void {
-    const resolve = () => {
+  return function(proto: any, key: string) {
+    const resolve = function () {
       assert(this._container != null, `Instance of ${proto.constructor.name} should has '_container' property with current Container instance`);
       return this._container.get(serviceIdentifier);
     };
     const doCache = opts.doCache != null ? opts.doCache : true;
-    _proxyGetter(proto, key, resolve, doCache);
+    return _proxyGetter(proto, key, resolve, doCache);
   };
 };
 
 function lazyInjectNamed(serviceIdentifier, named: string, opts: ?object = {}) {
   return function(proto: any, key: string): void {
-    const resolve = () => {
+    const resolve = function () {
       assert(this._container != null, `Instance of ${proto.constructor.name} should has '_container' property with current Container instance`);
       return this._container.getNamed(serviceIdentifier, named);
     };
     const doCache = opts.doCache != null ? opts.doCache : true;
-    _proxyGetter(proto, key, resolve, doCache);
+    return _proxyGetter(proto, key, resolve, doCache);
   };
 };
 
 function lazyInjectTagged(serviceIdentifier, key: string, value: any, opts: ?object = {}) {
   return function(proto: any, key: string): void {
-    const resolve = () => {
+    const resolve = function () {
       assert(this._container != null, `Instance of ${proto.constructor.name} should has '_container' property with current Container instance`);
       return this._container.getTagged(serviceIdentifier, key, value);
     };
     const doCache = opts.doCache != null ? opts.doCache : true;
-    _proxyGetter(proto, key, resolve, doCache);
+    return _proxyGetter(proto, key, resolve, doCache);
   };
 };
 
 function lazyMultiInject(serviceIdentifier, opts: ?object = {}) {
   return function(proto: any, key: string): void {
-    const resolve = () => {
+    const resolve = function () {
       assert(this._container != null, `Instance of ${proto.constructor.name} should has '_container' property with current Container instance`);
       return this._container.getAll(serviceIdentifier);
     };
     const doCache = opts.doCache != null ? opts.doCache : true;
-    _proxyGetter(proto, key, resolve, doCache);
+    return _proxyGetter(proto, key, resolve, doCache);
   };
 };
 
