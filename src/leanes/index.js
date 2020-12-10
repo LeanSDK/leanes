@@ -34,8 +34,13 @@ import Application from './facade/Application';
 import LogMessageCommand from './command/LogMessageCommand';
 import Script from './command/Script';
 
+import {
+  lazyInject, lazyInjectNamed, lazyInjectTagged, lazyMultiInject
+} from './decorators/lazyInjectDecorators';
+
 export * from '../puremvc';
 export * from '../pipes';
+
 export type { JoiT } from './types/JoiT';
 export type { MomentT } from './types/MomentT';
 export type {
@@ -51,7 +56,7 @@ export type { ApplicationInterface } from './interfaces/ApplicationInterface';
 export type { ScriptInterface } from './interfaces/ScriptInterface';
 
 const {
-  initialize, meta, nameBy, constant, resolver, util, freeze,
+  initialize, meta, nameBy, constant, resolver, util, freeze, decorator,
 } = PureMVC.NS;
 
 @LoggingJunctionMixin
@@ -85,6 +90,11 @@ class LeanES extends PureMVC {
   @constant LOGGER = 'LoggerJunctionMediator';
   @constant LOGGER_MODULE = 'LoggerModuleMediator';
   @constant LOG_MSG = 'LOG_MSG';
+
+  @decorator lazyInject = lazyInject;
+  @decorator lazyInjectNamed = lazyInjectNamed;
+  @decorator lazyInjectTagged = lazyInjectTagged;
+  @decorator lazyMultiInject = lazyMultiInject;
 
   @util joi = joi;
   @util moment = moment;
