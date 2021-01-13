@@ -1,0 +1,11 @@
+[include]
+../es/**/*
+./interfaces
+
+[libs]
+./declares
+
+[options]
+all=true
+esproposal.decorators=ignore
+esproposal.class_static_fields=enable

@@ -1,5 +1,3 @@
-
-// Brocfile.js
 const funnel = require('broccoli-funnel');
 const mergeTrees = require('broccoli-merge-trees');
 const Rollup = require("broccoli-rollup");
@@ -7,19 +5,21 @@ const babel = require("rollup-plugin-babel");
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
-// const globals = require('rollup-plugin-node-globals');
+const globals = require('rollup-plugin-node-globals');
+const { terser } = require('rollup-plugin-terser');
 
 const appRoot = __dirname + '/src';
 
 const extensions = [".ts", ".js"];
 
-// Compile JS through rollup
-let js = new Rollup(appRoot, {
+const dev = new Rollup(appRoot, {
   inputFiles: ["**/*.js"],
-  annotation: "JS Transformation",
+  annotation: "LeanES",
   rollup: {
-    input: __dirname + "/src/leanes/index.js",
+    input: __dirname + "/src/index.js",
     external: [
+      'axios', 'lodash', 'i', 'json-stable-stringify', 'joi', 'moment', 'jsonwebtoken', 'inversify',
+      'assert',
       'crypto',
       'net',
       'dns',
@@ -27,20 +27,21 @@ let js = new Rollup(appRoot, {
       'buffer',
       'events',
       'querystring',
-      'url'
+      'url',
+      'util'
     ],
     plugins: [
       json({
         extensions,
         include: 'node_modules/**',
-        preferConst: true, // Default: false
+        preferConst: true,
         indent: '  ',
-        compact: true, // Default: false
-        namedExports: true // Default: true
+        compact: true,
+        namedExports: true
       }),
       nodeResolve({
         extensions,
-        browser: true,
+        browser: false,
         preferBuiltins: false,
       }),
       commonjs({
@@ -50,6 +51,7 @@ let js = new Rollup(appRoot, {
       babel({
         extensions,
         sourceMap: true,
+        runtimeHelpers: true,
         babelrcRoots: [
           "./src/**",
         ],
@@ -59,40 +61,122 @@ let js = new Rollup(appRoot, {
         ],
         plugins: [
           "@babel/plugin-syntax-flow",
-          "flow-runtime",
+          ["flow-runtime", {
+            "assert": true,
+            "annotate": true
+          }],
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
-          'transform-class-properties',
-          // "transform-dirname-filename",
-          // ["transform-globals", {
-          //   replace: {__filename: "filename"},
-          // }]
+          "@babel/plugin-transform-runtime",
         ],
       }),
-      // globals({
-      //   include: __dirname + "/lib/**",
-      //   sourceMap: true,
-      //   process: false,
-      //   buffer: false,
-      //   dirname: true,
-      //   filename: true,
-      //   global: true,
-      //   baseDir: process.cwd()
-      // }),
+      globals({
+        sourceMap: false,
+        process: false,
+        buffer: false,
+        dirname: true,
+        filename: true,
+        global: false,
+        baseDir: process.cwd() + "/src/"
+      }),
     ],
-    output: {
-      // name: "LeanES",
-      // format: "umd",
-      dir: __dirname + '/lib',
-      format: "cjs",
-      sourcemap: true,
-    },
+    output: [
+      {
+        dir: __dirname + '/lib',
+        entryFileNames: 'index.dev.js',
+        format: "cjs",
+        name: "LeanES",
+        sourcemap: true,
+      },
+    ],
   }
 });
 
+const prod = new Rollup(appRoot, {
+  inputFiles: ["**/*.js"],
+  annotation: "LeanES",
+  rollup: {
+    input: __dirname + "/src/index.js",
+    external: [
+      'axios', 'lodash', 'i', 'json-stable-stringify', 'joi', 'moment', 'jsonwebtoken', 'inversify',
+      'assert',
+      'crypto',
+      'net',
+      'dns',
+      'stream',
+      'buffer',
+      'events',
+      'querystring',
+      'url',
+      'util'
+    ],
+    plugins: [
+      json({
+        extensions,
+        include: 'node_modules/**',
+        preferConst: true,
+        indent: '  ',
+        compact: true,
+        namedExports: true
+      }),
+      nodeResolve({
+        extensions,
+        browser: false,
+        preferBuiltins: false,
+      }),
+      commonjs({
+        include: 'node_modules/**',
+        preferBuiltins: false
+      }),
+      babel({
+        extensions,
+        sourceMap: false,
+        runtimeHelpers: true,
+        babelrcRoots: [
+          "./src/**",
+        ],
+        exclude: "node_modules/**",
+        presets: [
+          "@babel/preset-env"
+        ],
+        plugins: [
+          "@babel/plugin-syntax-flow",
+          "@babel/plugin-transform-flow-strip-types",
+          ["@babel/plugin-proposal-decorators", { "legacy": true }],
+          ["@babel/plugin-proposal-class-properties", { "loose": true }],
+          "@babel/plugin-transform-runtime",
+        ],
+      }),
+      globals({
+        sourceMap: false,
+        process: false,
+        buffer: false,
+        dirname: true,
+        filename: true,
+        global: false,
+        baseDir: process.cwd() + "/src/"
+      }),
+    ],
+    output: [
+      {
+        dir: __dirname + '/lib',
+        entryFileNames: 'index.min.js',
+        format: "cjs",
+        name: "LeanES",
+        sourcemap: false,
+        plugins: [
+          terser()
+        ]
+      }
+    ],
+  }
+});
 
-// Remove the existing module.exports and replace with:
-let tree = mergeTrees([js], { annotation: "Final output" });
-
-module.exports = tree;
+module.exports = options => {
+  if (options.env == 'production') {
+    return mergeTrees([prod], { annotation: "Final output" });
+  } else if (options.env == 'development') {
+    return mergeTrees([dev], { annotation: "Final output" });
+  }
+};
