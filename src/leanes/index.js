@@ -15,27 +15,32 @@
 
 import PureMVC from '../puremvc';
 import Pipes from '../pipes';
-import joi from 'joi-browser';
+import joi from 'joi';
 import moment from 'moment';
 
-import genRandomAlphaNumbersTF from './utils/genRandomAlphaNumbers';
-import hashPasswordTF from './utils/hashPassword';
-import jwtDecodeTF from './utils/jwtDecode';
-import jwtEncodeTF from './utils/jwtEncode';
-import makeHashTF from './utils/makeHash';
-import makeSignatureTF from './utils/makeSignature';
-import requestTF from './utils/request';
-import verifyPasswordTF from './utils/verifyPassword';
+import genRandomAlphaNumbers from './utils/genRandomAlphaNumbers';
+import hashPassword from './utils/hashPassword';
+import jwtDecode from './utils/jwtDecode';
+import jwtEncode from './utils/jwtEncode';
+import makeHash from './utils/makeHash';
+import makeSignature from './utils/makeSignature';
+import request from './utils/request';
+import verifyPassword from './utils/verifyPassword';
 
-import ApplicationMediatorMixinTF from './mixins/ApplicationMediatorMixin';
-import LoggingJunctionMixinTF from './mixins/LoggingJunctionMixin';
+import ApplicationMediatorMixin from './mixins/ApplicationMediatorMixin';
+import LoggingJunctionMixin from './mixins/LoggingJunctionMixin';
 
-import ApplicationTF from './facade/Application';
-import LogMessageCommandTF from './command/LogMessageCommand';
-import ScriptTF from './command/Script';
+import Application from './facade/Application';
+import LogMessageCommand from './command/LogMessageCommand';
+import Script from './command/Script';
+
+import {
+  lazyInject, lazyInjectNamed, lazyInjectTagged, lazyMultiInject
+} from './decorators/lazyInjectDecorators';
 
 export * from '../puremvc';
 export * from '../pipes';
+
 export type { JoiT } from './types/JoiT';
 export type { MomentT } from './types/MomentT';
 export type {
@@ -51,8 +56,23 @@ export type { ApplicationInterface } from './interfaces/ApplicationInterface';
 export type { ScriptInterface } from './interfaces/ScriptInterface';
 
 const {
-  initialize, meta, nameBy, constant, resolver, util, freeze,
+  initialize, meta, nameBy, constant, resolver, util, freeze, decorator,
 } = PureMVC.NS;
+
+@LoggingJunctionMixin
+@ApplicationMediatorMixin
+@LogMessageCommand
+@Script
+@Application
+
+@genRandomAlphaNumbers
+@hashPassword
+@jwtDecode
+@jwtEncode
+@makeHash
+@makeSignature
+@request
+@verifyPassword
 
 @initialize
 @resolver(require, name => require(name))
@@ -66,28 +86,20 @@ class LeanES extends PureMVC {
   @constant SCRIPT_RESULT = 'SCRIPT_RESULT';
   @constant STARTUP_COMPLETE = 'STARTUP_COMPLETE';
   @constant LIGHTWEIGHT = Symbol.for('LIGHTWEIGHT');
-  @constant SHELL = 'SHELL';
+  @constant SHELL = 'ShellJunctionMediator';
+  @constant LOGGER = 'LoggerJunctionMediator';
+  @constant LOGGER_MODULE = 'LoggerModuleMediator';
   @constant LOG_MSG = 'LOG_MSG';
+
+  @decorator lazyInject = lazyInject;
+  @decorator lazyInjectNamed = lazyInjectNamed;
+  @decorator lazyInjectTagged = lazyInjectTagged;
+  @decorator lazyMultiInject = lazyMultiInject;
 
   @util joi = joi;
   @util moment = moment;
 
   @constant Pipes = Pipes;
 }
-
-genRandomAlphaNumbersTF(LeanES);
-hashPasswordTF(LeanES);
-jwtDecodeTF(LeanES);
-jwtEncodeTF(LeanES);
-makeHashTF(LeanES);
-makeSignatureTF(LeanES);
-requestTF(LeanES);
-verifyPasswordTF(LeanES);
-
-ApplicationTF(LeanES);
-ScriptTF(LeanES);
-LogMessageCommandTF(LeanES);
-ApplicationMediatorMixinTF(LeanES);
-LoggingJunctionMixinTF(LeanES);
 
 export default freeze(LeanES);

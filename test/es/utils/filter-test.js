@@ -1,6 +1,7 @@
 const chai = require("chai");
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const { filter } = LeanES.NS.Utils;
 
 describe('Utils.filter', () => {

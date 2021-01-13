@@ -20,7 +20,7 @@ import { Container } from 'inversify';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     CoreObject,
     assert,
     initialize, partOf, meta, property, method, nameBy,
@@ -46,29 +46,30 @@ export default (Module) => {
 
     @property static _instanceMap: { [key: string]: ?ModelInterface } = {};
 
-    @property _ApplicationModule: ?Class<Module> = null;
+    // @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return voFacade.Module;
-            }
-          } else {
-            return voFacade.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+    @property get ApplicationModule(): Class<*> {
+      return this._container.get('ApplicationModule');
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
+      //     const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return voFacade.Module;
+      //       }
+      //     } else {
+      //       return voFacade.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @method static getInstance(asKey: string, container: Container): Model {
@@ -138,7 +139,7 @@ export default (Module) => {
     @method retrieveProxy(asProxyName: string): ?ProxyInterface {
       if (this._proxyMap[asProxyName] == null) {
         const {
-          className, data = {}
+          className, data
         } = this._metaProxyMap[asProxyName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
@@ -147,7 +148,7 @@ export default (Module) => {
           }
           const voProxy: ProxyInterface = this._container.get(asProxyName);
           voProxy.setName(asProxyName);
-          voProxy.setData(data);
+          if (data != null) voProxy.setData(data);
           this.registerProxy(voProxy);
         }
       }
@@ -167,26 +168,28 @@ export default (Module) => {
         className: (asProxyClassName != null ? asProxyClassName : asProxyName),
         data: ahData
       };
-      if (!this._container.isBound(`Factory<${asProxyName}>`)) {
-        this._container.bind(`Factory<${asProxyName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveProxy(asProxyName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asProxyName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asProxyName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveProxy(asProxyName)
+        }
+      });
     }
 
     @method addAdapter(asKey: string, asClassName: ?string): void {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getAdapter(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getAdapter(asKey)
+        }
+      });
     }
 
     @method hasAdapter(asKey: string): boolean {
@@ -211,11 +214,12 @@ export default (Module) => {
       let vAdapter;
       const vsClassName = this._classNames[asKey];
       if (!_.isEmpty(vsClassName)) {
-        vAdapter = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+        vAdapter = this.ApplicationModule.NS[vsClassName];
       }
       if (vAdapter != null) {
         if (!this._container.isBound(asKey)) {
           this._container.bind(asKey).to(vAdapter).inSingletonScope().onActivation((context, adapter) => {
+            adapter.setName(asKey);
             adapter.initializeNotifier(this._multitonKey);
             adapter.onRegister();
             return adapter;

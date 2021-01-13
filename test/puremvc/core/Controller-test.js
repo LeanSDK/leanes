@@ -2,13 +2,14 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   APPLICATION_MEDIATOR,
-  NotificationInterface, Controller, Command, Notification,
-  initialize, partOf, nameBy, meta, method, property
+  Controller, Command, Notification,
+  initialize, partOf, nameBy, meta, method, property,
+  Utils: { inversify: { Container } }
 } = LeanES.NS;
-import { Container } from 'inversify';
 
 describe('Controller', () => {
   describe('.getInstance', () => {
@@ -49,12 +50,10 @@ describe('Controller', () => {
     });
   });
   describe('.lazyRegisterCommand', () => {
+    let facade = null;
     const INSTANCE_NAME = 'CONTROLLER__TEST999';
-    before(() => {
-      LeanES.NS.Facade.getInstance(INSTANCE_NAME);
-    })
-    after(() => {
-      LeanES.NS.Facade.getInstance(INSTANCE_NAME).remove();
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should register new command lazily', () => {
       const spy = sinon.spy();
@@ -64,6 +63,19 @@ describe('Controller', () => {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
       }
+
+      @initialize
+      @partOf(Test)
+      class ApplicationFacade extends LeanES.NS.Facade {
+        @nameBy static  __filename = 'ApplicationFacade';
+        @meta static object = {};
+
+        @method initializeFacade(): void {
+          super.initializeFacade();
+          this.rebind('ApplicationModule').toConstructor(this.Module);
+        }
+      }
+
       @initialize
       @partOf(Test)
       class TestCommand extends Command {
@@ -74,18 +86,18 @@ describe('Controller', () => {
           spy();
         }
       }
-      @initialize
-      @partOf(Test)
-      class Application extends Test.NS.CoreObject {
-        @nameBy static  __filename = 'Application';
-        @meta static object = {};
-      }
-      const facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
+      // @initialize
+      // @partOf(Test)
+      // class Application extends Test.NS.CoreObject {
+      //   @nameBy static  __filename = 'Application';
+      //   @meta static object = {};
+      // }
+      facade = Test.NS.ApplicationFacade.getInstance(INSTANCE_NAME);
       const controller = facade._controller;
-      const mediator = Test.NS.Mediator.new();
-      mediator.setName(APPLICATION_MEDIATOR);
-      mediator.setViewComponent(Application.new());
-      facade.registerMediator(mediator);
+      // const mediator = Test.NS.Mediator.new();
+      // mediator.setName(APPLICATION_MEDIATOR);
+      // mediator.setViewComponent(Application.new());
+      // facade.registerMediator(mediator);
       let notification = new Notification('TEST_COMMAND2');
       controller.lazyRegisterCommand(notification.getName(), 'TestCommand');
       assert(controller.hasCommand(notification.getName()));
@@ -100,11 +112,34 @@ describe('Controller', () => {
     });
   });
   describe('.executeCommand', () => {
+    let facade = null;
+    const INSTANCE_NAME = 'CONTROLLER__TEST4';
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should register new command and call it', () => {
       expect(() => {
-        const controller = Controller.getInstance('CONTROLLER__TEST4', new Container());
         const spy = sinon.spy();
         spy.resetHistory();
+
+        @initialize
+        class Test extends LeanES {
+          @nameBy static  __filename = 'Test';
+          @meta static object = {};
+        }
+
+        @initialize
+        @partOf(Test)
+        class ApplicationFacade extends LeanES.NS.Facade {
+          @nameBy static  __filename = 'ApplicationFacade';
+          @meta static object = {};
+
+          @method initializeFacade(): void {
+            super.initializeFacade();
+            this.rebind('ApplicationModule').toConstructor(this.Module);
+          }
+        }
+
         @initialize
         class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
@@ -113,6 +148,10 @@ describe('Controller', () => {
             spy();
           }
         }
+
+        facade = Test.NS.ApplicationFacade.getInstance(INSTANCE_NAME);
+        const controller = facade._controller;
+
         let notification = new Notification('TEST_COMMAND1');
         controller.registerCommand(notification.getName(), TestCommand);
         controller.executeCommand(notification);

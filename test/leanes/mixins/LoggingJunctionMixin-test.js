@@ -2,9 +2,10 @@ const chai = require("chai");
 const expect = chai.expect;
 const assert = chai.assert;
 const sinon = require('sinon');
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
-  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant
+  initialize, partOf, nameBy, resolver, meta, mixin, constant
 } = LeanES.NS;
 
 describe('LoggingJunctionMixin', () => {
@@ -42,8 +43,8 @@ describe('LoggingJunctionMixin', () => {
       }
 
       @initialize
-      @mixin(LeanES.NS.LoggingJunctionMixin)
       @partOf(Test)
+      @mixin(LeanES.NS.LoggingJunctionMixin)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};

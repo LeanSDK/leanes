@@ -1,10 +1,11 @@
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
 const EventEmitter = require('events');
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   Script,
-  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method,
 } = LeanES.NS;
 
 describe('Script', () => {
@@ -42,10 +43,14 @@ describe('Script', () => {
     });
   });
   describe('execute', () => {
+    let facade = null;
+    after(() => {
+      if(facade !== null) {
+        facade.remove();
+      }
+    });
     it('should run script', async () => {
       const KEY = 'TEST_SCRIPT_002';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
-      const trigger = new EventEmitter();
 
       @initialize
       class Test extends LeanES {
@@ -53,6 +58,8 @@ describe('Script', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root2`;
       }
+      facade = Test.NS.Facade.getInstance(KEY);
+      const trigger = new EventEmitter();
 
       @initialize
       @partOf(Test)
@@ -90,8 +97,6 @@ describe('Script', () => {
     });
     it('should fail script', async () => {
       const KEY = 'TEST_SCRIPT_003';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
-      const trigger = new EventEmitter();
 
       @initialize
       class Test extends LeanES {
@@ -99,6 +104,9 @@ describe('Script', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root2`;
       }
+
+      facade = Test.NS.Facade.getInstance(KEY);
+      const trigger = new EventEmitter();
 
       @initialize
       @partOf(Test)

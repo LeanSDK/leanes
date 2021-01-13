@@ -73,10 +73,11 @@ export default (Module) => {
         }
       })
       .catch((err) => {
+        console.log('Error in request', err.code, err.response, err.message, err);
         return {
           body: undefined,
           headers: {},
-          status: err.code || err.response.status || 500,
+          status: err.code || err.response && err.response.status || 500,
           message: err.message
         }
       });

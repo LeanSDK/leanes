@@ -22,7 +22,7 @@ import { Container } from 'inversify';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     CoreObject,
     assert,
     initialize, partOf, meta, property, method, nameBy,
@@ -48,29 +48,30 @@ export default (Module) => {
 
     @property static _instanceMap: { [key: string]: ?ViewInterface } = {};
 
-    @property _ApplicationModule: ?Class<Module> = null;
+    // @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return voFacade.Module;
-            }
-          } else {
-            return voFacade.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+    @property get ApplicationModule(): Class<*> {
+      return this._container.get('ApplicationModule');
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
+      //     const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return voFacade.Module;
+      //       }
+      //     } else {
+      //       return voFacade.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @method static getInstance(asKey: string, container: Container): View {
@@ -167,7 +168,7 @@ export default (Module) => {
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {
       if (this._mediatorMap[asMediatorName] == null) {
         const {
-          className, data = {}
+          className, data
         } = this._metaMediatorMap[asMediatorName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
@@ -176,7 +177,7 @@ export default (Module) => {
           }
           const voMediator: MediatorInterface = this._container.get(asMediatorName);
           voMediator.setName(asMediatorName);
-          voMediator.setViewComponent(data);
+          if (data != null) voMediator.setViewComponent(data);
           this.registerMediator(voMediator);
         }
       }
@@ -185,6 +186,10 @@ export default (Module) => {
 
     @method getMediator(...args) {
       return this.retrieveMediator(...args);
+    }
+
+    @method activateMediator(name: string): void {
+      this.retrieveMediator(name);
     }
 
     @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
@@ -219,16 +224,17 @@ export default (Module) => {
 
     @method lazyRegisterMediator(asMediatorName: string, asMediatorClassName: ?string, ahData: ?any): void {
       this._metaMediatorMap[asMediatorName] = {
-        className: asMediatorClassName,
+        className: (asMediatorClassName != null ? asMediatorClassName : asMediatorName),
         data: ahData
       };
-      if (!this._container.isBound(`Factory<${asMediatorName}>`)) {
-        this._container.bind(`Factory<${asMediatorName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveMediator(asMediatorName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asMediatorName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asMediatorName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveMediator(asMediatorName)
+        }
+      });
     }
 
     @method _initializeView(): void { return; }

@@ -1,6 +1,7 @@
 const { expect, assert } = require('chai');
 const sinon = require("sinon");
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   initialize, initializeMixin, nameBy, meta, method
 } = LeanES.NS;

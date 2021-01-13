@@ -31,6 +31,7 @@ import initializeMixin from './decorators/initializeMixin';
 import initializePatch from './decorators/initializePatch';
 import mixin from './decorators/mixin';
 import patch from './decorators/patch';
+import extend from './decorators/extend';
 import plugin from './decorators/plugin';
 import meta from './decorators/meta';
 import partOf from './decorators/partOf';
@@ -46,6 +47,26 @@ import chains from './decorators/chains';
 import loadFiles from './decorators/loadFiles';
 import loadUtils from './decorators/loadUtils';
 
+import MetaObject from './MetaObject';
+import CoreObject from './CoreObject';
+
+import Proto from './Proto';
+import Module from './Module';
+
+import HookedObject from './statemachine/HookedObject';
+import State from './statemachine/State';
+import Transition from './statemachine/Transition';
+import Event from './statemachine/Event';
+import StateMachine from './statemachine/StateMachine';
+import StateMachineMixin from './mixins/StateMachineMixin';
+
+export type {HookedObjectInterface} from './interfaces/HookedObjectInterface';
+export type {TransitionInterface} from './interfaces/TransitionInterface';
+export type {EventInterface} from './interfaces/EventInterface';
+export type {StateInterface} from './interfaces/StateInterface';
+export type {StateMachineInterface} from './interfaces/StateMachineInterface';
+export type {CoreObjectInterface} from './interfaces/CoreObjectInterface';
+
 import assert from 'assert';
 import lodash from 'lodash';
 
@@ -60,6 +81,9 @@ const cphTemplatesList = Symbol.for('~templatesList');
 const cphFilesList = Symbol.for('~filesList');
 const cpoNamespace = Symbol.for('~namespace');
 
+const MODULE = Symbol.for('Module');
+const CORE_OBJECT = Symbol.for('CoreObject');
+const PROTO = Symbol.for('Proto');
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
 const CLASS_KEYS = [
@@ -71,46 +95,61 @@ const INSTANCE_KEYS = [
   'arguments', 'caller'
 ]
 
+@((target) => {
+  Reflect.defineProperty(target, 'name', {get: ()=> '_ES'});
+  Reflect.defineProperty(target.prototype, 'ROOT', { value: __dirname });
+  Reflect.defineProperty(target.prototype, 'ENV', { value: DEVELOPMENT });
+  Reflect.defineProperty(target.prototype, 'assert', { value: assert });
+  Reflect.defineProperty(target.prototype, 'assign', { value: assign });
+  Reflect.defineProperty(target.prototype, 'lodash', { value: lodash });
+  Reflect.defineProperty(target.prototype, '_', { value: lodash });
+  Reflect.defineProperty(target.prototype, 'inflect', { value: inflect });
+  Reflect.defineProperty(target.prototype, 'MODULE', { value: MODULE });
+  Reflect.defineProperty(target.prototype, 'CORE_OBJECT', { value: CORE_OBJECT });
+  Reflect.defineProperty(target.prototype, 'PROTO', { value: PROTO });
+  Reflect.defineProperty(target.prototype, 'PRODUCTION', { value: PRODUCTION });
+  Reflect.defineProperty(target.prototype, 'DEVELOPMENT', { value: DEVELOPMENT });
+  Reflect.defineProperty(target.prototype, 'CLASS_KEYS', { value: CLASS_KEYS });
+  Reflect.defineProperty(target.prototype, 'INSTANCE_KEYS', { value: INSTANCE_KEYS });
+  Reflect.defineProperty(target.prototype, 'initialize', { value: initialize });
+  Reflect.defineProperty(target.prototype, 'meta', { value: meta });
+  Reflect.defineProperty(target.prototype, 'constant', { value: constant });
+  Reflect.defineProperty(target.prototype, 'util', { value: util });
+  Reflect.defineProperty(target.prototype, 'nameBy', { value: nameBy });
+
+  target.prototype.MetaObject = MetaObject(target);
+  target.prototype.CoreObject = CoreObject(target);
+
+  Reflect.defineProperty(target, cpoMetaObject, {
+    enumerable: false,
+    configurable: true,
+    value: target.prototype.MetaObject.new(target, undefined)
+  });
+
+  target.prototype.Proto = Proto(target);
+  target.prototype.Module = Module(target);
+})
 class _ES {
   static get isExtensible() {
     return true;
   }
 }
 
-Reflect.defineProperty(_ES, 'name', {get: ()=> '_ES'});
-Reflect.defineProperty(_ES.prototype, 'ROOT', { value: __dirname });
-Reflect.defineProperty(_ES.prototype, 'ENV', { value: DEVELOPMENT });
-Reflect.defineProperty(_ES.prototype, 'assert', { value: assert });
-Reflect.defineProperty(_ES.prototype, 'assign', { value: assign });
-Reflect.defineProperty(_ES.prototype, 'lodash', { value: lodash });
-Reflect.defineProperty(_ES.prototype, '_', { value: lodash });
-Reflect.defineProperty(_ES.prototype, 'inflect', { value: inflect });
-Reflect.defineProperty(_ES.prototype, 'PRODUCTION', { value: PRODUCTION });
-Reflect.defineProperty(_ES.prototype, 'DEVELOPMENT', { value: DEVELOPMENT });
-Reflect.defineProperty(_ES.prototype, 'CLASS_KEYS', { value: CLASS_KEYS });
-Reflect.defineProperty(_ES.prototype, 'INSTANCE_KEYS', { value: INSTANCE_KEYS });
-Reflect.defineProperty(_ES.prototype, 'initialize', { value: initialize });
-Reflect.defineProperty(_ES.prototype, 'meta', { value: meta });
-Reflect.defineProperty(_ES.prototype, 'constant', { value: constant });
-Reflect.defineProperty(_ES.prototype, 'util', { value: util });
-Reflect.defineProperty(_ES.prototype, 'nameBy', { value: nameBy });
+@StateMachineMixin
+@StateMachine
+@Event
+@Transition
+@State
+@HookedObject
 
-import MetaObjectTF from './MetaObject';
-import CoreObjectTF from './CoreObject';
-_ES.prototype.MetaObject = MetaObjectTF(_ES);
-_ES.prototype.CoreObject = CoreObjectTF(_ES);
+@((target) => {
+  target.prototype.CoreObject.constructor = target.prototype.Proto;
+  target.prototype.MetaObject.constructor = target.prototype.Proto;
 
-Reflect.defineProperty(_ES, cpoMetaObject, {
-  enumerable: false,
-  configurable: true,
-  value: _ES.prototype.MetaObject.new(_ES, undefined)
-});
-
-
-import ProtoTF from './Proto';
-import ModuleTF from './Module';
-_ES.prototype.Proto = ProtoTF(_ES);
-_ES.prototype.Module = ModuleTF(_ES);
+  target.prototype.Proto.Module = target;
+  target.prototype.CoreObject.Module = target;
+  target.prototype.MetaObject.Module = target;
+})
 
 @initialize
 @resolver(require, name => require(name))
@@ -120,6 +159,9 @@ class ES extends _ES.prototype.Module {
 
   @constant ROOT = __dirname;
   @constant ENV = DEVELOPMENT;
+  @constant MODULE = MODULE;
+  @constant CORE_OBJECT = CORE_OBJECT;
+  @constant PROTO = PROTO;
   @constant PRODUCTION = PRODUCTION;
   @constant DEVELOPMENT = DEVELOPMENT;
   @constant CLASS_KEYS = CLASS_KEYS;
@@ -147,6 +189,7 @@ class ES extends _ES.prototype.Module {
   @decorator initializePatch = initializePatch;
   @decorator mixin = mixin;
   @decorator patch = patch;
+  @decorator extend = extend;
   @decorator plugin = plugin;
   @decorator meta = meta;
   @decorator partOf = partOf;
@@ -170,28 +213,7 @@ class ES extends _ES.prototype.Module {
   static get Module() {
     return this;
   }
-};
-
-
-ES.prototype.CoreObject.constructor = ES.prototype.Proto;
-ES.prototype.MetaObject.constructor = ES.prototype.Proto;
-
-ES.prototype.Proto.Module = ES;
-ES.prototype.CoreObject.Module = ES;
-ES.prototype.MetaObject.Module = ES;
-
-import HookedObjectTF from './statemachine/HookedObject';
-import StateTF from './statemachine/State';
-import TransitionTF from './statemachine/Transition';
-import EventTF from './statemachine/Event';
-import StateMachineTF from './statemachine/StateMachine';
-import StateMachineMixinTF from './mixins/StateMachineMixin';
-HookedObjectTF(ES);
-StateTF(ES);
-TransitionTF(ES);
-EventTF(ES);
-StateMachineTF(ES);
-StateMachineMixinTF(ES);
+}
 
 Reflect.defineProperty(ES, 'onMetalize', {
   configurable: true,
@@ -211,12 +233,5 @@ Reflect.defineProperty(ES, 'onMetalize', {
 });
 
 freeze(ES);
-
-export type {HookedObjectInterface} from './interfaces/HookedObjectInterface';
-export type {TransitionInterface} from './interfaces/TransitionInterface';
-export type {EventInterface} from './interfaces/EventInterface';
-export type {StateInterface} from './interfaces/StateInterface';
-export type {StateMachineInterface} from './interfaces/StateMachineInterface';
-export type {RecoverableStaticInterface} from './interfaces/RecoverableStaticInterface';
 
 export default ES;

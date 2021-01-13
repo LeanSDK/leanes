@@ -2,7 +2,8 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../lib/index.dev" : "../../src/index.js";
+const LeanES = require(path).default;
 const { Pipes, Facade } = LeanES.NS;
 const { Pipe, JunctionMediator, PipeAwareModule } = Pipes.NS;
 

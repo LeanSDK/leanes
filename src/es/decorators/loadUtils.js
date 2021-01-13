@@ -18,28 +18,36 @@ import assert from 'assert';
 const cpoMetaObject = Symbol.for('~metaObject');
 const cphUtilsMap = Symbol.for('~utilsMap');
 
-export default function loadUtils({ filesTreeSync }) {
+export default function loadUtils(Module) {
+  assert(Module[cpoMetaObject] != null, 'Target for `loadUtils` decorator must be a Class');
+  const {
+    FsUtils
+  } = Module.NS;
+  assert(FsUtils != null, 'Target for `loadUtils` decorator should has FsUtilsAddon');
+  const {
+    Utils: { filesTreeSync }
+  } = FsUtils.NS;
+
   (filesTreeSync: (string, ?object) => string[]);
-  return target => {
-    assert(target[cpoMetaObject] != null, 'Target for `loadUtils` decorator must be a Class');
-    const vsRoot = target.prototype.ROOT != null ? target.prototype.ROOT : '.';
-    const vsUtilsDir = `${vsRoot}/utils`;
-    const files = filesTreeSync(vsUtilsDir, {
-      filesOnly: true
-    });
-    const utilsMap = (files != null ? files : []).reduce((up, i) => {
-      const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
-      const [blackhole, utilName] = vsPathMatch != null ? vsPathMatch : [];
-      if (utilName != null && !/^\./.test(i)) {
-        up[utilName] = `${vsUtilsDir}/${i.replace(/\.js/, '')}`;
-      }
-      return up;
-    }, {});
-    Reflect.defineProperty(target, cphUtilsMap, {
-      enumerable: true,
-      writable: true,
-      value: utilsMap
-    });
-    return target;
-  }
-};
+
+  const vsRoot = Module.prototype.ROOT != null ? Module.prototype.ROOT : '.';
+  const vsUtilsDir = `${vsRoot}/utils`;
+  const files = filesTreeSync(vsUtilsDir, {
+    filesOnly: true, nosort: true
+  });
+  const utilsMap = (files != null ? files : []).reduce((up, i) => {
+    const vsPathMatch = i.match(/([\w\-\_]+)\.js$/);
+    const [blackhole, utilName] = vsPathMatch != null ? vsPathMatch : [];
+    if (utilName != null && !/^\./.test(i)) {
+      if (up[utilName] == null) up[utilName] = `${vsUtilsDir}/${i.replace(/\.js/, '')}`;
+    }
+    return up;
+  }, {});
+  Reflect.defineProperty(Module, cphUtilsMap, {
+    enumerable: true,
+    writable: true,
+    value: utilsMap
+  });
+
+  return Module;
+}

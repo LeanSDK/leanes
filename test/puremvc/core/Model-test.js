@@ -2,13 +2,14 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   APPLICATION_MEDIATOR,
   Proxy, Model,
-  initialize, partOf, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property,
+  Utils: { inversify: { Container } }
 } = LeanES.NS;
-import { Container } from 'inversify';
 
 describe('Model', () => {
   describe('.getInstance', () => {
@@ -74,6 +75,19 @@ describe('Model', () => {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
       }
+
+      @initialize
+      @partOf(Test)
+      class ApplicationFacade extends LeanES.NS.Facade {
+        @nameBy static  __filename = 'ApplicationFacade';
+        @meta static object = {};
+
+        @method initializeFacade(): void {
+          super.initializeFacade();
+          this.rebind('ApplicationModule').toConstructor(this.Module);
+        }
+      }
+
       @initialize
       @partOf(Test)
       class TestProxy extends Proxy {
@@ -83,18 +97,18 @@ describe('Model', () => {
           onRegister();
         }
       }
-      @initialize
-      @partOf(Test)
-      class Application extends Test.NS.CoreObject {
-        @nameBy static  __filename = 'Application';
-        @meta static object = {};
-      }
-      facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
+      // @initialize
+      // @partOf(Test)
+      // class Application extends Test.NS.CoreObject {
+      //   @nameBy static  __filename = 'Application';
+      //   @meta static object = {};
+      // }
+      facade = Test.NS.ApplicationFacade.getInstance(INSTANCE_NAME);
       const model = facade._model;
-      const mediator = Test.NS.Mediator.new();
-      mediator.setName(APPLICATION_MEDIATOR);
-      mediator.setViewComponent(Application.new())
-      facade.registerMediator(mediator);
+      // const mediator = Test.NS.Mediator.new();
+      // mediator.setName(APPLICATION_MEDIATOR);
+      // mediator.setViewComponent(Application.new())
+      // facade.registerMediator(mediator);
       const proxyData = {data: 'data'};
       model.lazyRegisterProxy('TEST_PROXY', 'TestProxy', proxyData);
       assert.isFalse(onRegister.called, 'Proxy is already registered');

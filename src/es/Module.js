@@ -27,7 +27,7 @@ export default (NS) => {
   }
 
   const {
-    PRODUCTION, DEVELOPMENT,
+    PRODUCTION, DEVELOPMENT, MODULE,
     MetaObject,
     _, inflect, assert, meta, nameBy,
   } = NS.prototype;
@@ -48,6 +48,8 @@ export default (NS) => {
   class Module extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
+
+    static MODULE = MODULE;
 
     static new() {
       assert.fail('new method unsupported for Module');
@@ -285,7 +287,9 @@ export default (NS) => {
     value: {
       get: (aoTarget, asName) => {
         if (!Reflect.get(aoTarget.prototype, asName)) {
+          assert(aoTarget[cphPathMap] != null, `The decorator \`@resolver(require, name => require(name))\` should be added above ${aoTarget.name} declaration`);
           const vsPath = aoTarget[cphPathMap][asName];
+          assert(vsPath != null, `Class/util ${asName} should be defined on ${aoTarget.name} directly or use \`@loadFiles\` decorator above ${aoTarget.name} declaration`);
           // console.log('>?>?>?> Module.NS.get before aoTarget.resolve', vsPath);
           if (vsPath) {
             aoTarget.resolve(vsPath);

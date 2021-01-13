@@ -14,6 +14,7 @@
 // along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
+import type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 
 export default (Module) => {
   const {

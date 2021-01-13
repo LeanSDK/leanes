@@ -1,7 +1,8 @@
 const chai = require("chai");
 const assert = chai.assert;
 const expect = chai.expect;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const { jsonStringify } = LeanES.NS.Utils;
 
 describe('Utils.jsonStringify', () => {

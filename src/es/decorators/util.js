@@ -26,7 +26,7 @@ export default function util(target, key, descriptor) {
     writable: false,
     value: (descriptor.value || descriptor.initializer())
   };
-  Reflect.defineProperty(target.constructor.prototype, key, newDescriptor);
+  Reflect.defineProperty(target, key, newDescriptor);
   target.constructor.metaObject.addMetaData('utilities', key, newDescriptor);
   return;
 };

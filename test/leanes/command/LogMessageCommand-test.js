@@ -1,9 +1,10 @@
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   LogMessageCommand,
-  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method,
 } = LeanES.NS;
 
 describe('LogMessageCommand', () => {

@@ -61,7 +61,7 @@ export default (Module) => {
       return `Notification Name: ${this.getName()}\nBody: ${(this.getBody() != null ? this.getBody().toString() : 'null')}\nType: ${(this.getType() != null ? this.getType() : 'null')}`;
     }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): NotificationInterface<T> {
+    @method static async restoreObject(acModule: Class<*>, replica: object): NotificationInterface<T> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const { name, body, type } = replica.notification;
         const instance = this.new(name, body, type);

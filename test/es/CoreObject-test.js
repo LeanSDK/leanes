@@ -2,11 +2,15 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../lib/index.dev" : "../../src/index.js";
+const LeanES = require(path).default;
 const {
   CoreObject, Proto,
   initialize, partOf, nameBy, meta
 } = LeanES.NS;
+
+console.log('ENV _________________________ ', process.env.ENV);
+
 
 describe('CoreObject', () => {
   describe('constructor', () => {
@@ -17,7 +21,7 @@ describe('CoreObject', () => {
       expect(() => {
         @initialize
         class Test extends LeanES {
-          @nameBy static  __filename = 'Test';
+          @nameBy static __filename = 'Test';
           @meta static object = {};
         }
 
@@ -32,17 +36,17 @@ describe('CoreObject', () => {
 
   describe('.new', () => {
     it('should be created (via `.new` method)', () => {
-        @initialize
-        class Test extends LeanES {
-          @nameBy static  __filename = 'Test';
-          @meta static object = {};
-        }
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+      }
 
-        @initialize
-        @partOf(Test)
-        class SubTest extends CoreObject {
-        }
-        expect(SubTest.new()).to.be.an.instanceof(SubTest);
+      @initialize
+      @partOf(Test)
+      class SubTest extends CoreObject {
+      }
+      expect(SubTest.new()).to.be.an.instanceof(SubTest);
     });
   });
 
@@ -64,7 +68,7 @@ describe('CoreObject', () => {
     it('should have class (Test Module)', async () => {
       @initialize
       class Test extends LeanES {
-        @nameBy static  __filename = 'Test';
+        @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 
@@ -118,7 +122,7 @@ describe('CoreObject', () => {
     it('should replicate specified class (Test Module)', async () => {
       @initialize
       class Test extends LeanES {
-        @nameBy static  __filename = 'Test';
+        @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 
@@ -136,24 +140,41 @@ describe('CoreObject', () => {
 
   describe('.restoreObject', () => {
     it('should restore specified class by replica', async () => {
-      const voRestored = await LeanES.restoreObject(LeanES, {type: 'instance', class: 'CoreObject'})
+      const voRestored = await LeanES.restoreObject(LeanES, { type: 'instance', class: 'CoreObject' })
       assert.equal(voRestored.constructor, CoreObject, 'Restored instance constructor is not CoreObject')
     })
-    it('should restore specified class by replica (Test Module)', async () => {
+    it('should restore specified class by replica (the same class)', async () => {
       @initialize
       class Test extends LeanES {
-        @nameBy static  __filename = 'Test';
+        @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 
       @initialize
       @partOf(Test)
       class MyClass extends Test.NS.CoreObject {
-        @nameBy static  __filename = 'MyClass';
+        @nameBy static __filename = 'MyClass';
         @meta static object = {};
       }
 
-      const voRestored = await Test.restoreObject(Test, {type: 'instance', class: 'MyClass'})
+      const voRestored = await MyClass.restoreObject(Test, { type: 'instance', class: 'MyClass' })
+      assert.equal(voRestored.constructor, MyClass, 'Restored instance constructor is not MyClass')
+    })
+    it('should restore specified class by replica (Test Module)', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @partOf(Test)
+      class MyClass extends Test.NS.CoreObject {
+        @nameBy static __filename = 'MyClass';
+        @meta static object = {};
+      }
+
+      const voRestored = await Test.restoreObject(Test, { type: 'instance', class: 'MyClass' })
       assert.equal(voRestored.constructor, MyClass, 'Restored instance constructor is not MyClass')
     })
   });
@@ -170,7 +191,7 @@ describe('CoreObject', () => {
     });
 
     it('should have wrap', () => {
-      expect(CoreObject.wrap.bind(CoreObject, [() => {}])).to.not.throw();
+      expect(CoreObject.wrap.bind(CoreObject, [() => { }])).to.not.throw();
     })
   })
 
@@ -178,7 +199,7 @@ describe('CoreObject', () => {
     it('should have superclass', async () => {
       @initialize
       class Test extends LeanES {
-        @nameBy static  __filename = 'Test';
+        @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 

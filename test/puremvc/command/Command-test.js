@@ -2,12 +2,12 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
-  NotificationInterface, Notification, Command,
-  initialize, nameBy, meta, method
+  Notification, Command,
+  initialize, nameBy, meta, method, injectable
 } = LeanES.NS;
-import { injectable } from "inversify";
 
 describe('Command', () => {
   describe('constructor', () => {
@@ -34,7 +34,7 @@ describe('Command', () => {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
 
-          @method execute(voNotification: NotificationInterface) {
+          @method execute(voNotification) {
             trigger();
           }
         }
@@ -79,7 +79,7 @@ describe('Command', () => {
           @nameBy static  __filename = 'TestCommand1';
           @meta static object = {};
 
-          @method execute(voNotification: NotificationInterface) {
+          @method execute(voNotification) {
             command1Execute()
           }
         }
@@ -92,7 +92,7 @@ describe('Command', () => {
           @nameBy static  __filename = 'TestCommand2';
           @meta static object = {};
 
-          @method execute(voNotification: NotificationInterface) {
+          @method execute(voNotification) {
             command2Execute()
           }
         }

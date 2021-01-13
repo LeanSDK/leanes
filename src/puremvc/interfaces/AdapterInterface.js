@@ -15,4 +15,8 @@
 
 export interface AdapterInterface {
   _cleanType: 'adapter';
+
+  getName(): string;
+
+  setName(asName: string): void;
 }

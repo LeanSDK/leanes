@@ -2,14 +2,14 @@ const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
-const LeanES = require("../../../src/leanes/index.js").default;
+const path = process.env.ENV === 'build' ? "../../../lib/index.dev" : "../../../src/index.js";
+const LeanES = require(path).default;
 const {
   APPLICATION_MEDIATOR,
-  NotificationInterface,
   View, Controller, Notification, Observer, Mediator,
-  initialize, partOf, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property,
+  Utils: { inversify: { Container } }
 } = LeanES.NS;
-import { Container } from 'inversify';
 
 describe('View', () => {
   describe('.getInstance', () => {

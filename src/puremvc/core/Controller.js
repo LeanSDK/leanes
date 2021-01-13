@@ -22,7 +22,7 @@ import { Container } from 'inversify';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     CoreObject,
     assert,
     initialize, partOf, meta, property, method, nameBy,
@@ -38,35 +38,36 @@ export default (Module) => {
     @property static MULTITON_MSG: string = 'Controller instance for this multiton key already constructed!';
 
     @property _view: ViewInterface = null;
-    @property _commandMap: {[key: string]: ?Class<CoreObject>} = null;
+    @property _commandMap: {[key: string]: ?Class<*>} = null;
     @property _classNames: {[key: string]: ?string} = null;
     @property _multitonKey: ?string = null;
 
     @property _container: Container = null;
     @property static _instanceMap: {[key: string]: ?ControllerInterface} = {};
-    @property _ApplicationModule: ?Class<Module> = null;
+    // @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
-          const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return voFacade.Module;
-            }
-          } else {
-            return voFacade.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+    @property get ApplicationModule(): Class<*> {
+      return this._container.get('ApplicationModule');
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
+      //     const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return voFacade.Module;
+      //       }
+      //     } else {
+      //       return voFacade.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @method static getInstance(asKey: string, container: Container): Controller {
@@ -127,7 +128,7 @@ export default (Module) => {
       }
     }
 
-    @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
+    @method registerCommand(asNotificationName: string, aCommand: Class<*>): void {
       if (!this._commandMap[asNotificationName]) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._commandMap[asNotificationName] = aCommand;
@@ -150,13 +151,14 @@ export default (Module) => {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._classNames[asNotificationName] = (asClassName != null ? asClassName : asNotificationName);
       }
-      if (!this._container.isBound(`Factory<${asNotificationName}>`)) {
-        this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
-          return () => {
-            return this.retrieveCommand(asNotificationName)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asNotificationName}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asNotificationName}>`).toFactory((context) => {
+        return () => {
+          return this.retrieveCommand(asNotificationName)
+        }
+      });
     }
 
     @method hasCommand(asNotificationName: string): boolean {
@@ -175,13 +177,14 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getCase(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getCase(asKey)
+        }
+      });
     }
 
     @method hasCase(asKey: string): boolean {
@@ -220,13 +223,14 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = (asClassName != null ? asClassName : asKey);
       }
-      if (!this._container.isBound(`Factory<${asKey}>`)) {
-        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
-          return () => {
-            return this.getSuite(asKey)
-          }
-        });
-      }
+      const boundMethod = this._container.isBound(`Factory<${asKey}>`)
+        ? 'rebind'
+        : 'bind';
+      this._container[boundMethod](`Factory<${asKey}>`).toFactory((context) => {
+        return () => {
+          return this.getSuite(asKey)
+        }
+      });
     }
 
     @method hasSuite(asKey: string): boolean {

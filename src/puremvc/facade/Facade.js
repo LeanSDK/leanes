@@ -57,28 +57,29 @@ export default (Module) => {
       return this._container;
     }
 
-    @property _ApplicationModule: ?Class<Module> = null;
+    // @property _ApplicationModule: ?Class<*> = null;
 
-    @property get ApplicationModule(): Class<Module> {
-      if (this._ApplicationModule != null) {
-        return this._ApplicationModule;
-      } else {
-        return this._ApplicationModule = (() => {if (this._multitonKey != null) {
-          const voMediator = this.retrieveMediator(APPLICATION_MEDIATOR);
-          if (voMediator != null) {
-            const app = voMediator.getViewComponent();
-            if (app != null && app.Module) {
-              return app.Module;
-            } else {
-              return this.Module;
-            }
-          } else {
-            return this.Module;
-          }
-        } else {
-          return this.Module;
-        }})()
-      }
+    @property get ApplicationModule(): Class<*> {
+      return this._container.get('ApplicationModule');
+      // if (this._ApplicationModule != null) {
+      //   return this._ApplicationModule;
+      // } else {
+      //   return this._ApplicationModule = (() => {if (this._multitonKey != null) {
+      //     const voMediator = this.retrieveMediator(APPLICATION_MEDIATOR);
+      //     if (voMediator != null) {
+      //       const app = voMediator.getViewComponent();
+      //       if (app != null && app.Module) {
+      //         return app.Module;
+      //       } else {
+      //         return this.Module;
+      //       }
+      //     } else {
+      //       return this.Module;
+      //     }
+      //   } else {
+      //     return this.Module;
+      //   }})()
+      // }
     }
 
     @method _initializeModel(): void {
@@ -100,6 +101,8 @@ export default (Module) => {
     }
 
     @method initializeFacade(): void {
+      // this._container.bind('ApplicationModule').toConstructor(this.Module);
+      this.bind('ApplicationModule').toConstructor(this.Module);
       this._initializeModel();
       this._initializeController();
       this._initializeView();
@@ -109,13 +112,14 @@ export default (Module) => {
       if (Facade._instanceMap[asKey] == null) {
         Facade._instanceMap[asKey] = new Proxy(this.new(asKey), {
           get: (target, name, receiver) => {
-            if ((name in target._container) && typeof target._container[name] === "function") {
+            if (name !== 'constructor' && (name in target._container) && typeof target._container[name] === "function") {
               return target._container[name].bind(target._container)
             } else {
               return target[name]
             }
           },
         });
+        Facade._instanceMap[asKey].initializeFacade();
       }
       return Facade._instanceMap[asKey];
     }
@@ -131,7 +135,7 @@ export default (Module) => {
       delete Facade._instanceMap[this._multitonKey];
     }
 
-    @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
+    @method registerCommand(asNotificationName: string, aCommand: Class<*>): void {
       this._controller.registerCommand(asNotificationName, aCommand);
     }
 
@@ -224,7 +228,7 @@ export default (Module) => {
     }
 
     @method getAdapter(asKey: string): ?AdapterInterface {
-      return this._model.getAdapter(asProxyName);
+      return this._model.getAdapter(asKey);
     }
 
     @method async removeAdapter(asKey: string): Promise<void> {
@@ -253,6 +257,10 @@ export default (Module) => {
 
     @method getMediator(...args): ?MediatorInterface {
       return this._view.getMediator(...args);
+    }
+
+    @method activateMediator(name: string): void {
+      return this._view.activateMediator(name);
     }
 
     @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
@@ -309,11 +317,11 @@ export default (Module) => {
       await Facade._instanceMap[key].remove();
     }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<FacadeInterface> {
+    @method static async restoreObject(acModule: Class<*>, replica: object): Promise<FacadeInterface> {
       if ((replica != null ? replica.class : undefined) === this.name && (replica != null ? replica.type : undefined) === 'instance') {
-        if (Facade._instanceMap[replica.multitonKey] == null) {
-          acModule.NS[replica.application].new();
-        }
+        // if (Facade._instanceMap[replica.multitonKey] == null) {
+        //   acModule.NS[replica.application].new();
+        // }
         return acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
       } else {
         return await super.restoreObject(acModule, replica);
@@ -323,9 +331,10 @@ export default (Module) => {
     @method static async replicateObject(instance: FacadeInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
-      const applicationMediator = instance.retrieveMediator(APPLICATION_MEDIATOR);
-      const application = applicationMediator.getViewComponent().constructor.name;
-      replica.application = application;
+      // const applicationMediator = instance.retrieveMediator(APPLICATION_MEDIATOR);
+      // const application = applicationMediator.getViewComponent().constructor.name;
+      // replica.application = application;
+      // replica.application = instance.ApplicationModule.name;
       return replica;
     }
 
@@ -333,7 +342,7 @@ export default (Module) => {
       super(...arguments);
       assert(Facade._instanceMap[asKey] == null, Facade.MULTITON_MSG);
       this.initializeNotifier(asKey);
-      this.initializeFacade();
+      // this.initializeFacade();
     }
   }
 }

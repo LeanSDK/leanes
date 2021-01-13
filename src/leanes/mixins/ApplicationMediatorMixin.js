@@ -39,7 +39,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): void {
+      @method handleNotification<T = ?any>(aoNotification: NotificationInterface<T>): ?Promise<void> {
         const vsName = aoNotification.getName();
         const voBody = aoNotification.getBody();
         const vsType = aoNotification.getType();
@@ -73,6 +73,7 @@ export default (Module) => {
       constructor() {
         super(... arguments);
         this.emitter = new EventEmitter();
+        this.emitter.setMaxListeners(Number.MAX_SAFE_INTEGER);
       }
     }
     return Mixin;

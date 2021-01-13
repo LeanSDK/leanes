@@ -56,7 +56,7 @@ export default (Module) => {
 
     @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<ProxyInterface> {
+    @method static async restoreObject(acModule: Class<*>, replica: object): Promise<ProxyInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const proxy = facade.retrieveProxy(replica.proxyName);
@@ -69,7 +69,7 @@ export default (Module) => {
     @method static async replicateObject(instance: ProxyInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
-      replica.proxyName = instance.getProxyName();
+      replica.proxyName = instance.getName();
       return replica;
     }
 

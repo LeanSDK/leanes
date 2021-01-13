@@ -19,7 +19,7 @@ import type { NotificationInterface } from '../interfaces/NotificationInterface'
 export default (Module) => {
 
   const {
-    Notifier, CoreObject,
+    Notifier,
     assert,
     initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
@@ -30,7 +30,7 @@ export default (Module) => {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @property _subCommands: Array<Class<CoreObject>> = null;
+    @property _subCommands: Array<Class<*>> = null;
 
     @method execute<T = ?any>(aoNotification: NotificationInterface<T>): void {
       const vlSubCommands = [... this._subCommands];
@@ -47,7 +47,7 @@ export default (Module) => {
 
     @method initializeSubCommands(): void { return; }
 
-    @method addSubCommand(aClass: Class<CoreObject>): void {
+    @method addSubCommand(aClass: Class<*>): void {
       this._subCommands.push(aClass);
       return;
     }

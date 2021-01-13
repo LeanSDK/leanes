@@ -52,7 +52,7 @@ export default function resolver(req, amReg) {
           for (const err of errors) {
             console.error(err);
           }
-          const newError = new Error('Resolver has undefined dependency');
+          const newError = new Error(`Resolver has undefined dependency. Class should be defined on ${this.name} directly or use \`@loadFiles\` decorator above ${this.name} declaration`);
           newError.name += ` IN ${this.name}`;
           throw newError;
         }

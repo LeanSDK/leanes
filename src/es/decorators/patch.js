@@ -26,6 +26,7 @@ export default function patch(...alPatches) {
     vlPatches.forEach((vmPatch) => {
       assert(vmPatch != null, 'Supplied patch was not found');
       assert(_.isFunction(vmPatch), 'Patch must be a function');
+      if (target.patches[vmPatch.name] != null) return;
 
       const SuperClass = Reflect.getPrototypeOf(target);
       const Patch = vmPatch(SuperClass);
@@ -39,7 +40,7 @@ export default function patch(...alPatches) {
       target.metaObject.parent = Patch.metaObject;
       target.metaObject.addMetaData('applyedPatches', Patch.name, Patch);
       (typeof Patch.including === 'function') && Patch.including.call(target);
-      return target;
     });
+    return target;
   };
 }
